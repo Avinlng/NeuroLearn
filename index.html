@@ -104,7 +104,6 @@
 </head>
 <body>
 <div id="app">
-    <!-- PAGE 1: LOGIN -->
     <div id="loginPage" class="container">
         <div class="logo">
             <h1>🧠 NeuroLearn</h1>
@@ -125,7 +124,6 @@
         </div>
     </div>
 
-    <!-- PAGE 2: SIGN UP FORM (Child Information) -->
     <div id="signupPage" style="display: none;" class="container">
         <div class="logo">
             <h1>🧠 NeuroLearn</h1>
@@ -156,7 +154,7 @@
             <label>Grade</label>
             <select id="childGrade">
                 <option value="Kindergarten">Kindergarten</option>
-                <option value="Grade 1" selected>Grade 1 (Canada)</option>
+                <option value="Grade 1" selected>Grade 1</option>
                 <option value="Grade 2">Grade 2</option>
                 <option value="Grade 3">Grade 3</option>
             </select>
@@ -182,7 +180,6 @@
         <div class="back-link" id="backToLogin">← Back to Sign In</div>
     </div>
 
-    <!-- PAGE 3: LESSON SCREEN -->
     <div id="lessonPage" style="display: none;" class="container">
         <div class="logo" style="margin-bottom: 10px;">
             <h1 style="font-size: 1.6rem;">🧠 NeuroLearn</h1>
@@ -201,7 +198,7 @@
         </div>
         <div class="progress" id="progressText">✨ Question 1 of 3</div>
         <button id="nextQuestionBtn" class="btn next-btn" style="display: none;">Next ➡</button>
-        <div class="info-note" style="margin-top: 20px;">🍁 Canada - Grade 1 | Free for everyone</div>
+        <div class="info-note" style="margin-top: 20px;">🍁 Canada - Free for everyone</div>
     </div>
 </div>
 
@@ -219,10 +216,16 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
     import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js";
+    
+    import emailjs from "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getDatabase(app);
+
+    emailjs.init({
+        publicKey: "waATHA92qJSL5qD8B"
+    });
 
     const questions = [
         { text: "2 + 1 = ?", correct: 3, options: [2, 3, 4] },
@@ -234,7 +237,6 @@
     let currentMode = null;
     let waitingForNext = false;
 
-    // DOM elements
     const loginPage = document.getElementById('loginPage');
     const signupPage = document.getElementById('signupPage');
     const lessonPage = document.getElementById('lessonPage');
@@ -297,6 +299,24 @@
         else { feedbackMsg.innerHTML = '🎉 You completed the lesson! 🎉'; nextBtn.style.display = 'none'; progressSpan.innerText = '🏆 Completed! 🏆'; }
     }
 
+    async function sendWelcomeEmail(email, fullName, learningMode) {
+        try {
+            const templateParams = {
+                to_email: email,
+                fullName: fullName,
+                learningMode: learningMode,
+            };
+            const response = await emailjs.send(
+                "service_dy71bx2",
+                "template_jvpez9b",
+                templateParams
+            );
+            console.log("✅ Welcome email sent!", response);
+        } catch (error) {
+            console.error("❌ Email error:", error);
+        }
+    }
+
     function loadLesson(childData, mode) {
         currentMode = mode;
         currentQuestionIndex = 0;
@@ -309,7 +329,6 @@
         lessonPage.style.display = 'block';
     }
 
-    // Mode selection
     let selectedMode = 'neurotypical';
     document.querySelectorAll('#modeSelectSignup .mode-option').forEach(opt => {
         opt.onclick = () => {
@@ -320,19 +339,16 @@
     });
     document.querySelector('#modeSelectSignup .mode-option.neurotypical')?.classList.add('selected');
 
-    // Show signup page
     document.getElementById('showSignupBtn').onclick = () => {
         loginPage.style.display = 'none';
         signupPage.style.display = 'block';
     };
 
-    // Back to login
     document.getElementById('backToLogin').onclick = () => {
         signupPage.style.display = 'none';
         loginPage.style.display = 'block';
     };
 
-    // Signup
     document.getElementById('completeSignupBtn').onclick = async () => {
         const email = document.getElementById('signupEmail').value.trim();
         const password = document.getElementById('signupPassword').value.trim();
@@ -348,7 +364,10 @@
             await set(ref(db, 'users/' + userCredential.user.uid), {
                 email, childFullName: fullName, childAge: parseInt(age), childGrade: grade, learningMode: selectedMode
             });
-            showSuccess(signupSuccess, 'Account created!');
+            
+            await sendWelcomeEmail(email, fullName, selectedMode);
+            
+            showSuccess(signupSuccess, 'Account created! Welcome email sent!');
             setTimeout(() => loadLesson({ fullName, age, grade }, selectedMode), 1000);
         } catch (err) {
             if (err.code === 'auth/email-already-in-use') showError(signupError, 'Email already exists');
@@ -356,7 +375,6 @@
         }
     };
 
-    // Login
     document.getElementById('loginBtn').onclick = async () => {
         const email = document.getElementById('loginEmail').value.trim();
         const password = document.getElementById('loginPassword').value.trim();
@@ -385,4 +403,4 @@
     });
 </script>
 </body>
-                                                             </html>
+</html>
