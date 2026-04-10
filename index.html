@@ -21,7 +21,6 @@
             padding: 20px;
         }
 
-        /* Mode styles (applied after login) */
         body.adhd-mode {
             background: #fef9e3;
         }
@@ -120,14 +119,6 @@
         .btn:hover {
             background: #1e2f4a;
             transform: translateY(-2px);
-        }
-        .btn-secondary {
-            background: #e2e8f0;
-            color: #2d3748;
-            margin-top: 12px;
-        }
-        .btn-secondary:hover {
-            background: #cbd5e1;
         }
         .toggle-text {
             text-align: center;
@@ -278,7 +269,6 @@
         <div id="authError" class="error" style="display: none;"></div>
         <div id="authSuccess" class="success" style="display: none;"></div>
 
-        <!-- Login Form -->
         <div id="loginForm">
             <div class="form-group">
                 <label>📧 Email</label>
@@ -294,7 +284,6 @@
             </div>
         </div>
 
-        <!-- Signup Form -->
         <div id="signupForm" style="display: none;">
             <div class="form-group">
                 <label>📧 Parent Email</label>
@@ -381,45 +370,37 @@
     </div>
 </div>
 
-<!-- Firebase SDKs -->
 <script type="module">
-    // ============================================================
-    // 🔥 REPLACE THIS WITH YOUR FIREBASE CONFIG FROM STEP 4 🔥
-    // ============================================================
+    // Firebase configuration (YOUR config is here)
     const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
+        apiKey: "AIzaSyB4Sd4MO7I8HeX42X0CZxbqLtZp7wLwkbU",
+        authDomain: "neurolearn-be081.firebaseapp.com",
+        projectId: "neurolearn-be081",
+        storageBucket: "neurolearn-be081.firebasestorage.app",
+        messagingSenderId: "852782942251",
+        appId: "1:852782942251:web:77a059e9257606022d426e"
     };
-    // ============================================================
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
     import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Questions for Grade 1 Math (Canada)
     const questions = [
         { text: "2 + 1 = ?", visual: "🍎🍎 + 🍎", correct: 3, options: [2, 3, 4] },
         { text: "3 + 2 = ?", visual: "🍎🍎🍎 + 🍎🍎", correct: 5, options: [4, 5, 6] },
         { text: "4 + 0 = ?", visual: "🍎🍎🍎🍎 + (none)", correct: 4, options: [3, 4, 5] }
     ];
 
-    // DOM Elements
     const authScreen = document.getElementById('authScreen');
     const lessonScreen = document.getElementById('lessonScreen');
     const loginForm = document.getElementById('loginForm');
     const signupForm = document.getElementById('signupForm');
     const authError = document.getElementById('authError');
     const authSuccess = document.getElementById('authSuccess');
-
     const childInfoBar = document.getElementById('childInfoBar');
     const lessonModeBadge = document.getElementById('lessonModeBadge');
     const logoutBtn = document.getElementById('logoutBtn');
@@ -430,13 +411,10 @@
     const nextBtn = document.getElementById('nextQuestionBtn');
     const progressSpan = document.getElementById('progressText');
 
-    // Lesson state
     let currentQuestionIndex = 0;
     let currentMode = null;
     let waitingForNext = false;
-    let currentUserId = null;
 
-    // Helper functions
     function showError(msg) {
         authError.innerText = msg;
         authError.style.display = 'block';
@@ -513,7 +491,7 @@
         } else {
             feedbackMsgDiv.innerHTML = (currentMode === 'adhd') ? '🎉 You finished! 3 gold stars! 🌟🌟🌟' :
                 (currentMode === 'autism') ? 'Lesson complete. Well done. ✓' :
-                    'Congratulations! You completed the lesson! 🎉';
+                'Congratulations! You completed the lesson! 🎉';
             nextBtn.style.display = 'none';
             progressSpan.innerText = '🏆 Completed! 🏆';
         }
@@ -530,7 +508,6 @@
         lessonScreen.style.display = 'block';
     }
 
-    // Mode selection in signup
     let selectedModeForSignup = 'neurotypical';
     const modeOptions = document.querySelectorAll('#modeSelectSignup .mode-option');
     modeOptions.forEach(opt => {
@@ -540,10 +517,8 @@
             selectedModeForSignup = opt.getAttribute('data-mode');
         });
     });
-    // Default select neurotypical
     document.querySelector('#modeSelectSignup .mode-option.neurotypical')?.classList.add('selected');
 
-    // Sign Up
     document.getElementById('signupBtn').addEventListener('click', async () => {
         const email = document.getElementById('signupEmail').value.trim();
         const password = document.getElementById('signupPassword').value.trim();
@@ -556,4 +531,22 @@
             return;
         }
         if (password.length < 6) {
-            showError('Password must be a
+            showError('Password must be at least 6 characters');
+            return;
+        }
+
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            await setDoc(doc(db, "users", user.uid), {
+                email: email,
+                childName: childName,
+                childAge: parseInt(childAge),
+                childGrade: childGrade,
+                learningMode: selectedModeForSignup,
+                createdAt: new Date().toISOString()
+            });
+            showSuccess('Account created successfully!');
+            loadLesson({ childName, childAge, childGrade }, selectedModeForSignup);
+        } catch (error) {
+       
