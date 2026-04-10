@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>NeuroLearn | Grade 1 Math - Canada</title>
+    <title>NeuroLearn | Grade 1 - Canada</title>
     <style>
         * {
             box-sizing: border-box;
@@ -63,6 +63,12 @@
             border: 2px solid #e2e8f0;
             border-radius: 16px;
             font-size: 1rem;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
         }
 
         .mode-options {
@@ -78,6 +84,7 @@
             border: 2px solid #e2e8f0;
             border-radius: 20px;
             cursor: pointer;
+            transition: all 0.2s;
         }
         .mode-option.selected {
             border-color: #667eea;
@@ -88,6 +95,7 @@
         .mode-option.neurotypical.selected { border-color: #3b82f6; background: #eff6ff; }
         .mode-option .emoji { font-size: 1.8rem; display: block; }
         .mode-option .label { font-size: 0.8rem; font-weight: 600; }
+        .mode-option .desc { font-size: 0.65rem; color: #6c757d; }
 
         .btn {
             width: 100%;
@@ -99,9 +107,12 @@
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
+            transition: all 0.2s;
         }
-        .btn:hover { background: #1e2f4a; }
-
+        .btn:hover {
+            background: #1e2f4a;
+            transform: translateY(-2px);
+        }
         .toggle-text {
             text-align: center;
             margin-top: 20px;
@@ -119,6 +130,7 @@
             padding: 12px;
             border-radius: 16px;
             margin-bottom: 20px;
+            font-size: 0.85rem;
             text-align: center;
         }
         .success {
@@ -127,6 +139,7 @@
             padding: 12px;
             border-radius: 16px;
             margin-bottom: 20px;
+            font-size: 0.85rem;
             text-align: center;
         }
         hr {
@@ -145,6 +158,7 @@
             padding: 20px;
             border-radius: 32px;
             margin: 20px 0;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
         }
         .question {
             font-size: 2rem;
@@ -172,10 +186,15 @@
             cursor: pointer;
             font-weight: bold;
         }
+        .option-btn:hover {
+            background: #cbd5e1;
+        }
         .feedback {
             text-align: center;
             font-size: 1.2rem;
             margin-top: 15px;
+            padding: 10px;
+            border-radius: 28px;
         }
         .next-btn {
             width: 100%;
@@ -184,6 +203,7 @@
             color: white;
             border: none;
             border-radius: 40px;
+            font-size: 1rem;
             cursor: pointer;
             margin-top: 20px;
         }
@@ -212,6 +232,7 @@
             padding: 12px;
             border-radius: 20px;
             margin-bottom: 20px;
+            font-size: 0.9rem;
             text-align: center;
         }
         .logout-btn {
@@ -220,6 +241,12 @@
             color: #dc2626;
             cursor: pointer;
             font-size: 0.8rem;
+        }
+        @media (max-width: 550px) {
+            .container { padding: 24px 20px; }
+            .mode-option .desc { display: none; }
+            .question { font-size: 1.5rem; }
+            .apples { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -260,7 +287,7 @@
                 <input type="password" id="signupPassword" placeholder="•••••• (min 6 chars)">
             </div>
             <hr>
-            <h3>👶 Child's Information</h3>
+            <h3 style="font-size: 1.1rem; margin-bottom: 15px;">👶 Child's Information</h3>
             <div class="form-group">
                 <label>Child's Name</label>
                 <input type="text" id="childName" placeholder="e.g., Emma">
@@ -284,14 +311,17 @@
                     <div class="mode-option adhd" data-mode="adhd">
                         <span class="emoji">🧠</span>
                         <span class="label">ADHD</span>
+                        <span class="desc">Quick feedback + stars</span>
                     </div>
                     <div class="mode-option autism" data-mode="autism">
                         <span class="emoji">🌟</span>
                         <span class="label">Autism</span>
+                        <span class="desc">Calm & predictable</span>
                     </div>
                     <div class="mode-option neurotypical" data-mode="neurotypical">
                         <span class="emoji">📘</span>
                         <span class="label">Neurotypical</span>
+                        <span class="desc">Standard learning</span>
                     </div>
                 </div>
             </div>
@@ -300,13 +330,15 @@
                 Already have an account? <a id="showLogin">Sign In</a>
             </div>
         </div>
-        <div class="info-note">🔒 Your data is saved locally. Firebase coming soon!</div>
+        <div class="info-note">
+            🔒 Your data is securely saved in Firebase.
+        </div>
     </div>
 
     <!-- LESSON SCREEN -->
     <div id="lessonScreen" style="display: none;">
         <div class="container">
-            <div class="logo">
+            <div class="logo" style="margin-bottom: 10px;">
                 <h1 style="font-size: 1.6rem;">🧠 NeuroLearn</h1>
             </div>
             <div class="child-info" id="childInfoBar"></div>
@@ -326,20 +358,42 @@
 
             <div class="progress" id="progressText">✨ Question 1 of 3</div>
             <button id="nextQuestionBtn" class="next-btn" style="display: none;">Next ➡</button>
-            <div class="info-note">🍁 Canada - Grade 1 | Free for everyone</div>
+            <div class="info-note" style="margin-top: 20px;">🍁 Canada - Grade 1 | Free for everyone</div>
         </div>
     </div>
 </div>
 
-<script>
-    // Questions
+<script type="module">
+    // ===== FIREBASE CONFIGURATION (YOUR ACTUAL CONFIG) =====
+    const firebaseConfig = {
+        apiKey: "AIzaSyB4Sd4MO7I8HeX42X0CZxbqLtZp7wLwkbU",
+        authDomain: "neurolearn-be081.firebaseapp.com",
+        projectId: "neurolearn-be081",
+        storageBucket: "neurolearn-be081.firebasestorage.app",
+        messagingSenderId: "852782942251",
+        appId: "1:852782942251:web:77a059e9257606022d426e",
+        databaseURL: "https://neurolearn-be081-default-rtdb.firebaseio.com/"
+    };
+    // ===== END FIREBASE CONFIG =====
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js";
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
     const questions = [
         { text: "2 + 1 = ?", visual: "🍎🍎 + 🍎", correct: 3, options: [2, 3, 4] },
         { text: "3 + 2 = ?", visual: "🍎🍎🍎 + 🍎🍎", correct: 5, options: [4, 5, 6] },
         { text: "4 + 0 = ?", visual: "🍎🍎🍎🍎 + (none)", correct: 4, options: [3, 4, 5] }
     ];
 
-    // DOM elements
+    let currentQuestionIndex = 0;
+    let currentMode = null;
+    let waitingForNext = false;
+
     const authScreen = document.getElementById('authScreen');
     const lessonScreen = document.getElementById('lessonScreen');
     const loginForm = document.getElementById('loginForm');
@@ -355,10 +409,6 @@
     const feedbackMsgDiv = document.getElementById('feedbackMsg');
     const nextBtn = document.getElementById('nextQuestionBtn');
     const progressSpan = document.getElementById('progressText');
-
-    let currentQuestionIndex = 0;
-    let currentMode = null;
-    let waitingForNext = false;
 
     function showError(msg) {
         authError.innerText = msg;
@@ -453,7 +503,6 @@
         lessonScreen.style.display = 'block';
     }
 
-    // Mode selection
     let selectedModeForSignup = 'neurotypical';
     const modeOptions = document.querySelectorAll('#modeSelectSignup .mode-option');
     modeOptions.forEach(opt => {
@@ -463,12 +512,9 @@
             selectedModeForSignup = opt.getAttribute('data-mode');
         });
     });
-    if (document.querySelector('#modeSelectSignup .mode-option.neurotypical')) {
-        document.querySelector('#modeSelectSignup .mode-option.neurotypical').classList.add('selected');
-    }
+    document.querySelector('#modeSelectSignup .mode-option.neurotypical')?.classList.add('selected');
 
-    // Sign Up (localStorage for now)
-    document.getElementById('signupBtn').addEventListener('click', () => {
+    document.getElementById('signupBtn').addEventListener('click', async () => {
         const email = document.getElementById('signupEmail').value.trim();
         const password = document.getElementById('signupPassword').value.trim();
         const childName = document.getElementById('childName').value.trim();
@@ -484,80 +530,19 @@
             return;
         }
 
-        // Save to localStorage
-        const users = JSON.parse(localStorage.getItem('neurolearn_users') || '{}');
-        if (users[email]) {
-            showError('Email already exists. Please sign in.');
-            return;
-        }
-
-        users[email] = {
-            password: password,
-            childName: childName,
-            childAge: childAge,
-            childGrade: childGrade,
-            learningMode: selectedModeForSignup
-        };
-        localStorage.setItem('neurolearn_users', JSON.stringify(users));
-        localStorage.setItem('neurolearn_current_user', email);
-
-        showSuccess('Account created successfully!');
-        loadLesson({ childName, childAge, childGrade }, selectedModeForSignup);
-    });
-
-    // Sign In
-    document.getElementById('loginBtn').addEventListener('click', () => {
-        const email = document.getElementById('loginEmail').value.trim();
-        const password = document.getElementById('loginPassword').value.trim();
-
-        if (!email || !password) {
-            showError('Please enter email and password');
-            return;
-        }
-
-        const users = JSON.parse(localStorage.getItem('neurolearn_users') || '{}');
-        const user = users[email];
-
-        if (!user || user.password !== password) {
-            showError('Invalid email or password');
-            return;
-        }
-
-        localStorage.setItem('neurolearn_current_user', email);
-        loadLesson({
-            childName: user.childName,
-            childAge: user.childAge,
-            childGrade: user.childGrade
-        }, user.learningMode);
-    });
-
-    // Logout
-    logoutBtn.addEventListener('click', () => {
-        localStorage.removeItem('neurolearn_current_user');
-        authScreen.style.display = 'block';
-        lessonScreen.style.display = 'none';
-        loginForm.style.display = 'block';
-        signupForm.style.display = 'none';
-        document.getElementById('loginEmail').value = '';
-        document.getElementById('loginPassword').value = '';
-        document.body.classList.remove('adhd-mode', 'autism-mode', 'neurotypical-mode');
-    });
-
-    // Toggle forms
-    document.getElementById('showSignup').addEventListener('click', () => {
-        loginForm.style.display = 'none';
-        signupForm.style.display = 'block';
-        authError.style.display = 'none';
-    });
-    document.getElementById('showLogin').addEventListener('click', () => {
-        signupForm.style.display = 'none';
-        loginForm.style.display = 'block';
-        authError.style.display = 'none';
-    });
-
-    nextBtn.addEventListener('click', nextQuestion);
-
-    // Check for existing session
-    const currentUser = localStorage.getItem('neurolearn_current_user');
-    if (currentUser) {
-        const users = JSON.parse(
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            
+            await set(ref(db, 'users/' + user.uid), {
+                email: email,
+                childName: childName,
+                childAge: parseInt(childAge),
+                childGrade: childGrade,
+                learningMode: selectedModeForSignup,
+                createdAt: new Date().toISOString()
+            });
+            
+            showSuccess('Account created successfully!');
+            loadLesson({ childName, childAge, childGrade }, selectedModeForSignup);
+        } catch 
