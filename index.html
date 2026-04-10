@@ -5,14 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>NeuroLearn | Sign Up & Learn</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
@@ -20,12 +15,9 @@
             align-items: center;
             padding: 20px;
         }
-
-        /* Mode styles for lesson */
         body.adhd-mode { background: #fef9e3; }
         body.autism-mode { background: #e9f5f0; }
         body.neurotypical-mode { background: #f0f9ff; }
-
         .container {
             max-width: 550px;
             width: 100%;
@@ -34,44 +26,18 @@
             padding: 32px 28px;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
         }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 28px;
-        }
-        .logo h1 {
-            font-size: 2rem;
-            color: #2c3e6d;
-        }
-        .logo .tagline {
-            color: #6c757d;
-            font-size: 0.85rem;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: #2d3748;
-            font-size: 0.85rem;
-        }
+        .logo { text-align: center; margin-bottom: 28px; }
+        .logo h1 { font-size: 2rem; color: #2c3e6d; }
+        .logo .tagline { color: #6c757d; font-size: 0.85rem; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; color: #2d3748; font-size: 0.85rem; }
         input, select {
             width: 100%;
             padding: 12px 16px;
             border: 2px solid #e2e8f0;
             border-radius: 16px;
             font-size: 1rem;
-            transition: all 0.2s;
-            font-family: inherit;
         }
-        input:focus, select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
         .mode-options {
             display: flex;
             gap: 12px;
@@ -85,19 +51,13 @@
             border: 2px solid #e2e8f0;
             border-radius: 20px;
             cursor: pointer;
-            transition: all 0.2s;
         }
-        .mode-option.selected {
-            border-color: #667eea;
-            background: #f0f4ff;
-        }
+        .mode-option.selected { border-color: #667eea; background: #f0f4ff; }
         .mode-option.adhd.selected { border-color: #f59e0b; background: #fffbeb; }
         .mode-option.autism.selected { border-color: #10b981; background: #ecfdf5; }
         .mode-option.neurotypical.selected { border-color: #3b82f6; background: #eff6ff; }
         .mode-option .emoji { font-size: 1.8rem; display: block; }
         .mode-option .label { font-size: 0.8rem; font-weight: 600; }
-        .mode-option .desc { font-size: 0.65rem; color: #6c757d; }
-
         .btn {
             width: 100%;
             padding: 14px;
@@ -108,24 +68,14 @@
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.2s;
         }
-        .btn:hover {
-            background: #1e2f4a;
-            transform: translateY(-2px);
-        }
-        .btn-secondary {
-            background: #e2e8f0;
-            color: #2d3748;
-            margin-top: 12px;
-        }
+        .btn:hover { background: #1e2f4a; }
         .error {
             background: #fee2e2;
             color: #dc2626;
             padding: 12px;
             border-radius: 16px;
             margin-bottom: 20px;
-            font-size: 0.85rem;
             text-align: center;
         }
         .success {
@@ -134,123 +84,22 @@
             padding: 12px;
             border-radius: 16px;
             margin-bottom: 20px;
-            font-size: 0.85rem;
             text-align: center;
         }
-        hr {
-            margin: 20px 0;
-            border: none;
-            border-top: 1px solid #e2e8f0;
-        }
-        .info-note {
-            font-size: 0.7rem;
-            color: #6c757d;
-            text-align: center;
-            margin-top: 20px;
-        }
-        .card {
-            background: #ffffffdd;
-            padding: 20px;
-            border-radius: 32px;
-            margin: 20px 0;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-        }
-        .question {
-            font-size: 2rem;
-            text-align: center;
-            margin: 20px 0;
-        }
-        .apples {
-            font-size: 2.5rem;
-            text-align: center;
-            letter-spacing: 8px;
-        }
-        .options {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin: 20px 0;
-        }
-        .option-btn {
-            font-size: 1.5rem;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 60px;
-            background: #eef2ff;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .option-btn:hover {
-            background: #cbd5e1;
-        }
-        .feedback {
-            text-align: center;
-            font-size: 1.2rem;
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 28px;
-        }
-        .next-btn {
-            width: 100%;
-            padding: 12px;
-            background: #0f3b2c;
-            color: white;
-            border: none;
-            border-radius: 40px;
-            font-size: 1rem;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        .progress {
-            font-size: 0.9rem;
-            background: #f1f5f9;
-            padding: 10px;
-            border-radius: 28px;
-            text-align: center;
-        }
-        .header-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .mode-badge {
-            background: #cbd5e1;
-            padding: 6px 14px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-        .child-info {
-            background: #f1f5f9;
-            padding: 12px;
-            border-radius: 20px;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-            text-align: center;
-        }
-        .logout-btn {
-            background: none;
-            border: none;
-            color: #dc2626;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 15px;
-            color: #667eea;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
-        @media (max-width: 550px) {
-            .container { padding: 24px 20px; }
-            .mode-option .desc { display: none; }
-            .question { font-size: 1.5rem; }
-            .apples { font-size: 1.8rem; }
-        }
+        hr { margin: 20px 0; border: none; border-top: 1px solid #e2e8f0; }
+        .info-note { font-size: 0.7rem; color: #6c757d; text-align: center; margin-top: 20px; }
+        .card { background: #f8fafc; padding: 20px; border-radius: 32px; margin: 20px 0; text-align: center; }
+        .question { font-size: 2rem; margin: 20px 0; }
+        .options { display: flex; gap: 15px; justify-content: center; margin: 20px 0; }
+        .option-btn { padding: 12px 24px; font-size: 20px; border: none; border-radius: 40px; background: #e2e8f0; cursor: pointer; }
+        .feedback { font-size: 1.2rem; margin: 15px 0; }
+        .next-btn { background: #0f3b2c; margin-top: 10px; }
+        .progress { background: #f1f5f9; padding: 10px; border-radius: 20px; text-align: center; margin-top: 15px; }
+        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .mode-badge { background: #cbd5e1; padding: 6px 14px; border-radius: 40px; font-size: 12px; }
+        .logout-btn { background: #dc2626; width: auto; padding: 6px 15px; font-size: 12px; margin: 0; border: none; border-radius: 30px; color: white; cursor: pointer; }
+        .child-info { background: #f1f5f9; padding: 12px; border-radius: 20px; margin-bottom: 20px; text-align: center; }
+        .back-link { text-align: center; margin-top: 15px; color: #667eea; cursor: pointer; font-size: 0.85rem; }
     </style>
 </head>
 <body>
@@ -310,9 +159,6 @@
                 <option value="Grade 1" selected>Grade 1 (Canada)</option>
                 <option value="Grade 2">Grade 2</option>
                 <option value="Grade 3">Grade 3</option>
-                <option value="Grade 4">Grade 4</option>
-                <option value="Grade 5">Grade 5</option>
-                <option value="Grade 6">Grade 6</option>
             </select>
         </div>
         <div class="form-group">
@@ -321,17 +167,14 @@
                 <div class="mode-option adhd" data-mode="adhd">
                     <span class="emoji">🧠</span>
                     <span class="label">ADHD</span>
-                    <span class="desc">Quick feedback + stars</span>
                 </div>
                 <div class="mode-option autism" data-mode="autism">
                     <span class="emoji">🌟</span>
                     <span class="label">Autism</span>
-                    <span class="desc">Calm & predictable</span>
                 </div>
                 <div class="mode-option neurotypical" data-mode="neurotypical">
                     <span class="emoji">📘</span>
                     <span class="label">Neurotypical</span>
-                    <span class="desc">Standard learning</span>
                 </div>
             </div>
         </div>
@@ -351,22 +194,18 @@
         </div>
         <h2>🍎 Apple Addition</h2>
         <p>Let's add numbers up to 10</p>
-
         <div class="card">
-            <div class="apples" id="appleVisual">🍎 + 🍎🍎</div>
             <div class="question" id="questionText">2 + 1 = ?</div>
             <div class="options" id="optionsContainer"></div>
             <div id="feedbackMsg" class="feedback"></div>
         </div>
-
         <div class="progress" id="progressText">✨ Question 1 of 3</div>
-        <button id="nextQuestionBtn" class="next-btn" style="display: none;">Next ➡</button>
+        <button id="nextQuestionBtn" class="btn next-btn" style="display: none;">Next ➡</button>
         <div class="info-note" style="margin-top: 20px;">🍁 Canada - Grade 1 | Free for everyone</div>
     </div>
 </div>
 
 <script type="module">
-    // ===== FIREBASE CONFIGURATION =====
     const firebaseConfig = {
         apiKey: "AIzaSyB4Sd4MO7I8HeX42X0CZxbqLtZp7wLwkbU",
         authDomain: "neurolearn-be081.firebaseapp.com",
@@ -385,14 +224,17 @@
     const auth = getAuth(app);
     const db = getDatabase(app);
 
-    // Questions for Grade 1 Math
     const questions = [
-        { text: "2 + 1 = ?", visual: "🍎🍎 + 🍎", correct: 3, options: [2, 3, 4] },
-        { text: "3 + 2 = ?", visual: "🍎🍎🍎 + 🍎🍎", correct: 5, options: [4, 5, 6] },
-        { text: "4 + 0 = ?", visual: "🍎🍎🍎🍎 + (none)", correct: 4, options: [3, 4, 5] }
+        { text: "2 + 1 = ?", correct: 3, options: [2, 3, 4] },
+        { text: "3 + 2 = ?", correct: 5, options: [4, 5, 6] },
+        { text: "4 + 0 = ?", correct: 4, options: [3, 4, 5] }
     ];
 
-    // DOM Elements
+    let currentQuestionIndex = 0;
+    let currentMode = null;
+    let waitingForNext = false;
+
+    // DOM elements
     const loginPage = document.getElementById('loginPage');
     const signupPage = document.getElementById('signupPage');
     const lessonPage = document.getElementById('lessonPage');
@@ -403,57 +245,34 @@
     const lessonModeBadge = document.getElementById('lessonModeBadge');
     const logoutBtn = document.getElementById('logoutBtn');
     const questionText = document.getElementById('questionText');
-    const appleVisual = document.getElementById('appleVisual');
     const optionsContainer = document.getElementById('optionsContainer');
-    const feedbackMsgDiv = document.getElementById('feedbackMsg');
+    const feedbackMsg = document.getElementById('feedbackMsg');
     const nextBtn = document.getElementById('nextQuestionBtn');
     const progressSpan = document.getElementById('progressText');
 
-    let currentQuestionIndex = 0;
-    let currentMode = null;
-    let waitingForNext = false;
-
-    function showError(element, msg) {
-        element.innerText = msg;
-        element.style.display = 'block';
-        setTimeout(() => element.style.display = 'none', 4000);
-    }
-
-    function showSuccess(element, msg) {
-        element.innerText = msg;
-        element.style.display = 'block';
-        setTimeout(() => element.style.display = 'none', 3000);
-    }
+    function showError(el, msg) { el.innerText = msg; el.style.display = 'block'; setTimeout(() => el.style.display = 'none', 4000); }
+    function showSuccess(el, msg) { el.innerText = msg; el.style.display = 'block'; setTimeout(() => el.style.display = 'none', 3000); }
 
     function applyModeStyles(mode) {
         document.body.classList.remove('adhd-mode', 'autism-mode', 'neurotypical-mode');
-        if (mode === 'adhd') {
-            document.body.classList.add('adhd-mode');
-            lessonModeBadge.innerText = '🧠 ADHD Mode · Quick feedback + stars';
-        } else if (mode === 'autism') {
-            document.body.classList.add('autism-mode');
-            lessonModeBadge.innerText = '🌟 Autism Mode · Calm & predictable';
-        } else {
-            document.body.classList.add('neurotypical-mode');
-            lessonModeBadge.innerText = '📘 Neurotypical Mode · Standard learning';
-        }
+        if (mode === 'adhd') { document.body.classList.add('adhd-mode'); lessonModeBadge.innerText = '🧠 ADHD Mode'; }
+        else if (mode === 'autism') { document.body.classList.add('autism-mode'); lessonModeBadge.innerText = '🌟 Autism Mode'; }
+        else { document.body.classList.add('neurotypical-mode'); lessonModeBadge.innerText = '📘 Neurotypical Mode'; }
         currentMode = mode;
     }
 
     function renderQuestion() {
         waitingForNext = false;
         nextBtn.style.display = 'none';
-        feedbackMsgDiv.innerHTML = '';
+        feedbackMsg.innerHTML = '';
         const q = questions[currentQuestionIndex];
         questionText.innerText = q.text;
-        appleVisual.innerText = q.visual;
-
         optionsContainer.innerHTML = '';
         q.options.forEach(opt => {
             const btn = document.createElement('button');
             btn.innerText = opt;
             btn.classList.add('option-btn');
-            btn.addEventListener('click', () => checkAnswer(opt, q.correct));
+            btn.onclick = () => checkAnswer(opt, q.correct);
             optionsContainer.appendChild(btn);
         });
         progressSpan.innerText = `🍁 Question ${currentQuestionIndex + 1} of ${questions.length}`;
@@ -461,38 +280,21 @@
 
     function checkAnswer(selected, correct) {
         if (waitingForNext) return;
-        const isCorrect = (selected === correct);
-        const allBtns = document.querySelectorAll('.option-btn');
-        allBtns.forEach(btn => { btn.disabled = true; });
-
-        let feedbackText = '';
-        if (currentMode === 'adhd') {
-            if (isCorrect) feedbackText = '✅ YES! ⭐ +1 star! You rock!';
-            else feedbackText = `❌ Oops! ${correct} is correct. Try again next time. ✨`;
-        } else if (currentMode === 'autism') {
-            if (isCorrect) feedbackText = 'Correct. ✓ Well done.';
-            else feedbackText = `Not correct. The right answer is ${correct}.`;
-        } else {
-            if (isCorrect) feedbackText = '✔ Correct! Great job!';
-            else feedbackText = `✘ The correct answer is ${correct}. Keep going!`;
-        }
-        feedbackMsgDiv.innerHTML = feedbackText;
+        const isCorrect = selected === correct;
+        document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
+        let text = '';
+        if (currentMode === 'adhd') text = isCorrect ? '✅ YES! ⭐ You rock!' : `❌ Oops! ${correct} is correct.`;
+        else if (currentMode === 'autism') text = isCorrect ? 'Correct. ✓ Well done.' : `Not correct. The answer is ${correct}.`;
+        else text = isCorrect ? '✔ Correct! Great job!' : `✘ The correct answer is ${correct}.`;
+        feedbackMsg.innerHTML = text;
         waitingForNext = true;
         nextBtn.style.display = 'block';
     }
 
     function nextQuestion() {
         if (!waitingForNext) return;
-        if (currentQuestionIndex + 1 < questions.length) {
-            currentQuestionIndex++;
-            renderQuestion();
-        } else {
-            feedbackMsgDiv.innerHTML = (currentMode === 'adhd') ? '🎉 You finished! 3 gold stars! 🌟🌟🌟' :
-                (currentMode === 'autism') ? 'Lesson complete. Well done. ✓' :
-                'Congratulations! You completed the lesson! 🎉';
-            nextBtn.style.display = 'none';
-            progressSpan.innerText = '🏆 Completed! 🏆';
-        }
+        if (currentQuestionIndex + 1 < questions.length) { currentQuestionIndex++; renderQuestion(); }
+        else { feedbackMsg.innerHTML = '🎉 You completed the lesson! 🎉'; nextBtn.style.display = 'none'; progressSpan.innerText = '🏆 Completed! 🏆'; }
     }
 
     function loadLesson(childData, mode) {
@@ -507,44 +309,80 @@
         lessonPage.style.display = 'block';
     }
 
-    // Mode selection in signup
-    let selectedModeForSignup = 'neurotypical';
-    const modeOptions = document.querySelectorAll('#modeSelectSignup .mode-option');
-    modeOptions.forEach(opt => {
-        opt.addEventListener('click', () => {
-            modeOptions.forEach(o => o.classList.remove('selected'));
+    // Mode selection
+    let selectedMode = 'neurotypical';
+    document.querySelectorAll('#modeSelectSignup .mode-option').forEach(opt => {
+        opt.onclick = () => {
+            document.querySelectorAll('#modeSelectSignup .mode-option').forEach(o => o.classList.remove('selected'));
             opt.classList.add('selected');
-            selectedModeForSignup = opt.getAttribute('data-mode');
-        });
+            selectedMode = opt.dataset.mode;
+        };
     });
     document.querySelector('#modeSelectSignup .mode-option.neurotypical')?.classList.add('selected');
 
     // Show signup page
-    document.getElementById('showSignupBtn').addEventListener('click', () => {
+    document.getElementById('showSignupBtn').onclick = () => {
         loginPage.style.display = 'none';
         signupPage.style.display = 'block';
-        loginError.style.display = 'none';
-    });
+    };
 
     // Back to login
-    document.getElementById('backToLogin').addEventListener('click', () => {
+    document.getElementById('backToLogin').onclick = () => {
         signupPage.style.display = 'none';
         loginPage.style.display = 'block';
-        signupError.style.display = 'none';
-        signupSuccess.style.display = 'none';
-    });
+    };
 
-    // Complete Signup
-    document.getElementById('completeSignupBtn').addEventListener('click', async () => {
+    // Signup
+    document.getElementById('completeSignupBtn').onclick = async () => {
         const email = document.getElementById('signupEmail').value.trim();
         const password = document.getElementById('signupPassword').value.trim();
         const fullName = document.getElementById('childFullName').value.trim();
         const age = document.getElementById('childAge').value;
         const grade = document.getElementById('childGrade').value;
 
-        if (!email || !password || !fullName || !age) {
-            showError(signupError, 'Please fill all fields');
-            return;
+        if (!email || !password || !fullName || !age) return showError(signupError, 'Please fill all fields');
+        if (password.length < 6) return showError(signupError, 'Password must be at least 6 characters');
+        
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            await set(ref(db, 'users/' + userCredential.user.uid), {
+                email, childFullName: fullName, childAge: parseInt(age), childGrade: grade, learningMode: selectedMode
+            });
+            showSuccess(signupSuccess, 'Account created!');
+            setTimeout(() => loadLesson({ fullName, age, grade }, selectedMode), 1000);
+        } catch (err) {
+            if (err.code === 'auth/email-already-in-use') showError(signupError, 'Email already exists');
+            else showError(signupError, err.message);
         }
-        if (password.length < 6) {
-            showError(signupError, 'Password 
+    };
+
+    // Login
+    document.getElementById('loginBtn').onclick = async () => {
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value.trim();
+        if (!email || !password) return showError(loginError, 'Please enter email and password');
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const snapshot = await get(child(ref(db), 'users/' + userCredential.user.uid));
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                loadLesson({ fullName: data.childFullName, age: data.childAge, grade: data.childGrade }, data.learningMode);
+            } else showError(loginError, 'User data not found');
+        } catch (err) { showError(loginError, 'Invalid email or password'); }
+    };
+
+    logoutBtn.onclick = async () => { await signOut(auth); location.reload(); };
+    nextBtn.onclick = nextQuestion;
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const snapshot = await get(child(ref(db), 'users/' + user.uid));
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                loadLesson({ fullName: data.childFullName, age: data.childAge, grade: data.childGrade }, data.learningMode);
+            } else { loginPage.style.display = 'block'; lessonPage.style.display = 'none'; }
+        } else { loginPage.style.display = 'block'; lessonPage.style.display = 'none'; }
+    });
+</script>
+</body>
+                                                             </html>
