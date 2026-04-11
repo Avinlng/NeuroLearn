@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -242,8 +243,31 @@
     const auth = getAuth(app);
     const db = getDatabase(app);
 
-    // Initialize EmailJS
     emailjs.init("waATHA92qJSL5qD8B");
+
+    async function sendWelcomeEmail(email, fullName, learningMode) {
+        try {
+            const templateParams = {
+                to_email: email,
+                to_name: fullName.split(' ')[0] || "Parent",
+                child_name: fullName,
+                learning_mode: learningMode.charAt(0).toUpperCase() + learningMode.slice(1),
+                app_name: "NeuroLearn",
+                support_email: "support@neurolearn.com"
+            };
+            
+            const serviceID = "service_70s3jsg";
+            const templateID = "template_ab7c3de";
+            
+            const response = await emailjs.send(serviceID, templateID, templateParams);
+            console.log("Welcome email sent successfully", response);
+            return true;
+        } catch (error) {
+            console.error("EmailJS error:", error);
+            console.log("Would send welcome email to:", email, "for", fullName, "Mode:", learningMode);
+            return false;
+        }
+    }
 
     const questions = [
         { text: "2 + 1 = ?", correct: 3, options: [2, 3, 4] },
@@ -345,7 +369,7 @@
         }
     }
 
-    function loadLesson(childData, mode) {
+    async function loadLesson(childData, mode, userId) {
         currentMode = mode;
         currentQuestionIndex = 0;
         waitingForNext = false;
@@ -358,27 +382,6 @@
         lessonPage.style.display = 'block';
     }
 
-    // ==================== WELCOME EMAIL (ACTIVE) ====================
-    async function sendWelcomeEmail(email, fullName, learningMode) {
-        try {
-            const templateParams = {
-                to_email: email,
-                fullName: fullName,
-                learningMode: learningMode,
-                message: `Welcome to NeuroLearn! Your child ${fullName} is enrolled in ${learningMode} mode.`
-            };
-            
-            const response = await emailjs.send("service_dy71bx2", "template_jvpez9b", templateParams);
-            console.log("✅ Welcome email sent successfully!", response);
-            return true;
-            
-        } catch (error) {
-            console.error("❌ EmailJS Error:", error);
-            return false;
-        }
-    }
-
-    // ==================== MODE SELECTION ====================
     let selectedMode = 'neurotypical';
     const modeOptions = document.querySelectorAll('#modeSelectSignup .mode-option');
     modeOptions.forEach(opt => {
@@ -392,7 +395,6 @@
         modeOptions[2].classList.add('selected');
     }
 
-    // ==================== FORGOT PASSWORD ====================
     document.getElementById('forgotPasswordBtn').onclick = () => {
         loginPage.style.display = 'none';
         resetPage.style.display = 'block';
@@ -408,11 +410,9 @@
 
     document.getElementById('sendResetBtn').onclick = async () => {
         const email = document.getElementById('resetEmail').value.trim();
-        
         if (!email) {
             return showError(resetError, 'Please enter your email address');
         }
-        
         try {
             await sendPasswordResetEmail(auth, email);
             showSuccess(resetPageSuccess, '✅ Reset link sent! Check your email inbox.');
@@ -433,7 +433,6 @@
         }
     };
 
-    // ==================== SHOW SIGNUP ====================
     document.getElementById('showSignupBtn').onclick = () => {
         loginPage.style.display = 'none';
         signupPage.style.display = 'block';
@@ -453,7 +452,6 @@
         loginError.style.display = 'none';
     };
 
-    // ==================== SIGNUP BUTTON (WITH EMAIL) ====================
     document.getElementById('completeSignupBtn').onclick = async () => {
         const email = document.getElementById('signupEmail').value.trim();
         const password = document.getElementById('signupPassword').value.trim();
@@ -463,4 +461,6 @@
         const mode = selectedMode;
 
         if (!email || !password || !fullName || !age) {
+            return showError(signupError, 'Please fill all fields');
+        }
       
