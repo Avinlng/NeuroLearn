@@ -102,7 +102,6 @@
         .back-link { text-align: center; margin-top: 15px; color: #667eea; cursor: pointer; font-size: 0.85rem; }
         .forgot-link { text-align: center; margin-top: 10px; font-size: 0.8rem; }
         .forgot-link a { color: #667eea; cursor: pointer; text-decoration: none; }
-        .forgot-link a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -125,7 +124,7 @@
         <div class="forgot-link">
             <a id="forgotPasswordBtn">🔑 Forgot Password?</a>
         </div>
-        <div class="info-note" style="margin-top: 20px;">
+        <div class="info-note">
             Don't have an account? <a id="showSignupBtn" style="color: #667eea; cursor: pointer;">Create account</a>
         </div>
     </div>
@@ -144,7 +143,7 @@
         </div>
         <div class="form-group">
             <label>🔒 Password</label>
-            <input type="password" id="signupPassword" placeholder="•••••• (min 6 chars)">
+            <input type="password" id="signupPassword" placeholder="min 6 characters">
         </div>
         <hr>
         <h3 style="font-size: 1.1rem; margin-bottom: 15px;">👶 Child's Information</h3>
@@ -219,14 +218,15 @@
         </div>
         <div class="progress" id="progressText">✨ Question 1 of 3</div>
         <button id="nextQuestionBtn" class="btn next-btn" style="display: none;">Next ➡</button>
-        <div class="info-note" style="margin-top: 20px;">🍁 Learning for every brain</div>
+        <div class="info-note">🍁 Learning for every brain</div>
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script type="module">
-    import { initializeApp } from "https://cdn.skypack.dev/firebase@11.0.0/app";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from "https://cdn.skypack.dev/firebase@11.0.0/auth";
-    import { getDatabase, ref, set, get, child } from "https://cdn.skypack.dev/firebase@11.0.0/database";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyB4Sd4MO7I8HeX42X0CZxbqLtZp7wLwkbU",
@@ -241,6 +241,8 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getDatabase(app);
+
+    emailjs.init("waATHA92qJSL5qD8B");
 
     const questions = [
         { text: "2 + 1 = ?", correct: 3, options: [2, 3, 4] },
@@ -355,6 +357,23 @@
         lessonPage.style.display = 'block';
     }
 
+    async function sendWelcomeEmail(email, fullName, learningMode) {
+        try {
+            const templateParams = {
+                to_email: email,
+                fullName: fullName,
+                learningMode: learningMode,
+                message: `Welcome to NeuroLearn! Your child ${fullName} is enrolled in ${learningMode} mode.`
+            };
+            const response = await emailjs.send("service_dy71bx2", "template_jvpez9b", templateParams);
+            console.log("Welcome email sent successfully", response);
+            return true;
+        } catch (error) {
+            console.error("Email send error:", error);
+            return false;
+        }
+    }
+
     let selectedMode = 'neurotypical';
     const modeOptions = document.querySelectorAll('#modeSelectSignup .mode-option');
     modeOptions.forEach(opt => {
@@ -391,13 +410,11 @@
         try {
             await sendPasswordResetEmail(auth, email);
             showSuccess(resetPageSuccess, '✅ Reset link sent! Check your email inbox.');
-            
             setTimeout(() => {
                 resetPage.style.display = 'none';
                 loginPage.style.display = 'block';
                 document.getElementById('resetEmail').value = '';
             }, 3000);
-            
         } catch (err) {
             console.error("Reset error:", err);
             if (err.code === 'auth/user-not-found') {
@@ -446,22 +463,4 @@
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             await set(ref(db, 'users/' + userCredential.user.uid), {
-                email: email,
-                childFullName: fullName, 
-                childAge: parseInt(age), 
-                childGrade: grade, 
-                learningMode: selectedMode,
-                createdAt: new Date().toISOString()
-            });
-            
-            showSuccess(signupSuccess, 'Account created successfully! Redirecting...');
-            
-            setTimeout(() => {
-                loadLesson({ fullName, age, grade }, selectedMode);
-            }, 1500);
-            
-        } catch (err) {
-            console.error("Signup error:", err);
-            if (err.code === 'auth/email-already-in-use') {
-                showError(signupError, 'Email already exists. Please sign in instead.');
-    
+                email:
