@@ -62,15 +62,13 @@
         <div class="forgot-link"><a id="forgotPasswordBtn">🔑 Forgot Password?</a></div>
         <div class="info-note">Don't have an account? <a id="showSignupBtn" style="color:#667eea;cursor:pointer">Create account</a></div>
     </div>
-
     <div id="signupPage" style="display:none" class="container">
         <div class="logo"><h1>🧠 NeuroLearn</h1><div class="tagline">Create your account</div></div>
         <div id="signupError" class="error" style="display:none"></div>
         <div id="signupSuccess" class="success" style="display:none"></div>
         <div class="form-group"><label>📧 Parent Email</label><input type="email" id="signupEmail" placeholder="parent@example.com"></div>
         <div class="form-group"><label>🔒 Password</label><input type="password" id="signupPassword" placeholder="min 6 characters"></div>
-        <hr>
-        <h3>👶 Child's Information</h3>
+        <hr><h3>👶 Child's Information</h3>
         <div class="form-group"><label>Child's Full Name</label><input type="text" id="childFullName" placeholder="e.g., Emma Smith"></div>
         <div class="form-group"><label>Age</label><input type="number" id="childAge" placeholder="Age"></div>
         <div class="form-group"><label>Grade</label><select id="childGrade"><option>Kindergarten</option><option selected>Grade 1</option><option>Grade 2</option><option>Grade 3</option><option>Grade 4</option><option>Grade 5</option><option>Grade 6</option></select></div>
@@ -78,7 +76,6 @@
         <button class="btn" id="completeSignupBtn">Create Account & Start Learning</button>
         <div class="back-link" id="backToLogin">← Back to Sign In</div>
     </div>
-
     <div id="resetPage" style="display:none" class="container">
         <div class="logo"><h1>🔐 Reset Password</h1><div class="tagline">We'll send you a reset link</div></div>
         <div id="resetError" class="error" style="display:none"></div>
@@ -87,25 +84,21 @@
         <button class="btn" id="sendResetBtn">Send Reset Email</button>
         <div class="back-link" id="backToLoginFromReset">← Back to Sign In</div>
     </div>
-
     <div id="lessonPage" style="display:none" class="container">
         <div class="header-flex"><h1 style="font-size:1.6rem">🧠 NeuroLearn</h1><button id="logoutBtn" class="btn logout-btn">🚪 Sign Out</button></div>
         <div class="child-info" id="childInfoBar"></div>
         <div class="mode-badge" id="lessonModeBadge">Mode: --</div>
-        <h2>🍎 Apple Addition</h2>
-        <p>Let's add numbers up to 10</p>
+        <h2>🍎 Apple Addition</h2><p>Let's add numbers up to 10</p>
         <div class="card"><div class="question" id="questionText">2 + 1 = ?</div><div class="options" id="optionsContainer"></div><div id="feedbackMsg" class="feedback"></div></div>
         <div class="progress" id="progressText">✨ Question 1 of 3</div>
         <button id="nextQuestionBtn" class="btn next-btn" style="display:none">Next ➡</button>
         <div class="info-note">🍁 Learning for every brain</div>
     </div>
 </div>
-
 <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-database-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-
 <script>
 const firebaseConfig={apiKey:"AIzaSyB4Sd4MO7I8HeX42X0CZxbqLtZp7wLwkbU",authDomain:"neurolearn-be081.firebaseapp.com",projectId:"neurolearn-be081",storageBucket:"neurolearn-be081.firebasestorage.app",messagingSenderId:"852782942251",appId:"1:852782942251:web:77a059e9257606022d426e",databaseURL:"https://neurolearn-be081-default-rtdb.firebaseio.com/"};
 firebase.initializeApp(firebaseConfig);
