@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NeuroLearn | Sign Up & Learn</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -53,9 +53,6 @@
             cursor: pointer;
         }
         .mode-option.selected { border-color: #667eea; background: #f0f4ff; }
-        .mode-option.adhd.selected { border-color: #f59e0b; background: #fffbeb; }
-        .mode-option.autism.selected { border-color: #10b981; background: #ecfdf5; }
-        .mode-option.neurotypical.selected { border-color: #3b82f6; background: #eff6ff; }
         .mode-option .emoji { font-size: 1.8rem; display: block; }
         .mode-option .label { font-size: 0.8rem; font-weight: 600; }
         .btn {
@@ -90,7 +87,7 @@
         .info-note { font-size: 0.7rem; color: #6c757d; text-align: center; margin-top: 20px; }
         .card { background: #f8fafc; padding: 20px; border-radius: 32px; margin: 20px 0; text-align: center; }
         .question { font-size: 2rem; margin: 20px 0; }
-        .options { display: flex; gap: 15px; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
+        .options { display: flex; gap: 15px; justify-content: center; margin: 20px 0; }
         .option-btn { padding: 12px 24px; font-size: 20px; border: none; border-radius: 40px; background: #e2e8f0; cursor: pointer; }
         .option-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .feedback { font-size: 1.2rem; margin: 15px 0; }
@@ -101,12 +98,13 @@
         .logout-btn { background: #dc2626; width: auto; padding: 6px 15px; font-size: 12px; margin: 0; border: none; border-radius: 30px; color: white; cursor: pointer; }
         .child-info { background: #f1f5f9; padding: 12px; border-radius: 20px; margin-bottom: 20px; text-align: center; }
         .back-link { text-align: center; margin-top: 15px; color: #667eea; cursor: pointer; font-size: 0.85rem; }
-        .forgot-link { text-align: center; margin-top: 10px; font-size: 0.8rem; }
+        .forgot-link { text-align: center; margin-top: 10px; }
         .forgot-link a { color: #667eea; cursor: pointer; text-decoration: none; }
     </style>
 </head>
 <body>
 <div id="app">
+    <!-- صفحه ورود -->
     <div id="loginPage" class="container">
         <div class="logo">
             <h1>🧠 NeuroLearn</h1>
@@ -130,6 +128,7 @@
         </div>
     </div>
 
+    <!-- صفحه ثبت نام -->
     <div id="signupPage" style="display: none;" class="container">
         <div class="logo">
             <h1>🧠 NeuroLearn</h1>
@@ -147,7 +146,7 @@
             <input type="password" id="signupPassword" placeholder="min 6 characters">
         </div>
         <hr>
-        <h3 style="font-size: 1.1rem; margin-bottom: 15px;">👶 Child's Information</h3>
+        <h3>👶 Child's Information</h3>
         <div class="form-group">
             <label>Child's Full Name</label>
             <input type="text" id="childFullName" placeholder="e.g., Emma Smith">
@@ -159,38 +158,27 @@
         <div class="form-group">
             <label>Grade</label>
             <select id="childGrade">
-                <option value="Kindergarten">Kindergarten</option>
-                <option value="Grade 1" selected>Grade 1</option>
-                <option value="Grade 2">Grade 2</option>
-                <option value="Grade 3">Grade 3</option>
+                <option>Kindergarten</option>
+                <option selected>Grade 1</option>
+                <option>Grade 2</option>
+                <option>Grade 3</option>
             </select>
         </div>
         <div class="form-group">
             <label>🧠 Learning Mode</label>
             <div class="mode-options" id="modeSelectSignup">
-                <div class="mode-option adhd" data-mode="adhd">
-                    <span class="emoji">🧠</span>
-                    <span class="label">ADHD</span>
-                </div>
-                <div class="mode-option autism" data-mode="autism">
-                    <span class="emoji">🌟</span>
-                    <span class="label">Autism</span>
-                </div>
-                <div class="mode-option neurotypical" data-mode="neurotypical">
-                    <span class="emoji">📘</span>
-                    <span class="label">Neurotypical</span>
-                </div>
+                <div class="mode-option" data-mode="adhd"><span class="emoji">🧠</span><span class="label">ADHD</span></div>
+                <div class="mode-option" data-mode="autism"><span class="emoji">🌟</span><span class="label">Autism</span></div>
+                <div class="mode-option" data-mode="neurotypical"><span class="emoji">📘</span><span class="label">Neurotypical</span></div>
             </div>
         </div>
         <button class="btn" id="completeSignupBtn">Create Account & Start Learning</button>
         <div class="back-link" id="backToLogin">← Back to Sign In</div>
     </div>
 
+    <!-- صفحه فراموشی رمز -->
     <div id="resetPage" style="display: none;" class="container">
-        <div class="logo">
-            <h1>🔐 Reset Password</h1>
-            <div class="tagline">We'll send you a reset link</div>
-        </div>
+        <div class="logo"><h1>🔐 Reset Password</h1></div>
         <div id="resetError" class="error" style="display: none;"></div>
         <div id="resetPageSuccess" class="success" style="display: none;"></div>
         <div class="form-group">
@@ -201,34 +189,25 @@
         <div class="back-link" id="backToLoginFromReset">← Back to Sign In</div>
     </div>
 
+    <!-- صفحه درس -->
     <div id="lessonPage" style="display: none;" class="container">
-        <div class="logo" style="margin-bottom: 10px;">
-            <h1 style="font-size: 1.6rem;">🧠 NeuroLearn</h1>
-        </div>
-        <div class="child-info" id="childInfoBar"></div>
         <div class="header-flex">
-            <span class="mode-badge" id="lessonModeBadge">Mode: --</span>
+            <h1 style="font-size: 1.6rem;">🧠 NeuroLearn</h1>
             <button id="logoutBtn" class="logout-btn">🚪 Sign Out</button>
         </div>
+        <div class="child-info" id="childInfoBar"></div>
+        <div class="mode-badge" id="lessonModeBadge">Mode: --</div>
         <h2>🍎 Apple Addition</h2>
-        <p>Let's add numbers up to 10</p>
         <div class="card">
             <div class="question" id="questionText">2 + 1 = ?</div>
             <div class="options" id="optionsContainer"></div>
             <div id="feedbackMsg" class="feedback"></div>
         </div>
-        <div class="progress" id="progressText">✨ Question 1 of 3</div>
+        <div class="progress" id="progressText">Question 1 of 3</div>
         <button id="nextQuestionBtn" class="btn next-btn" style="display: none;">Next ➡</button>
-        <div class="info-note">🍁 Learning for every brain</div>
     </div>
 </div>
 
-<script type="text/javascript">
-    // ابتدا EmailJS رو مقداردهی می‌کنیم
-    (function(){
-        emailjs.init("waATHA92qJSL5qD8B");
-    })();
-</script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script type="module">
     // ایمپورت Firebase
@@ -247,25 +226,28 @@
         databaseURL: "https://neurolearn-be081-default-rtdb.firebaseio.com/"
     };
 
-    // مقداردهی اولیه Firebase
+    // مقداردهی Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getDatabase(app);
+    
+    // مقداردهی EmailJS
+    emailjs.init("waATHA92qJSL5qD8B");
 
-    // سوالات درس
+    // سوالات
     const questions = [
         { text: "2 + 1 = ?", correct: 3, options: [2, 3, 4] },
         { text: "3 + 2 = ?", correct: 5, options: [4, 5, 6] },
         { text: "4 + 0 = ?", correct: 4, options: [3, 4, 5] }
     ];
 
-    // متغیرهای سراسری
+    // متغیرها
     let currentQuestionIndex = 0;
     let currentMode = 'neurotypical';
     let waitingForNext = false;
-    let currentUserId = null;
+    let selectedMode = 'neurotypical';
 
-    // گرفتن المنت‌ها
+    // المنت‌ها
     const loginPage = document.getElementById('loginPage');
     const signupPage = document.getElementById('signupPage');
     const resetPage = document.getElementById('resetPage');
@@ -275,201 +257,196 @@
     const signupSuccess = document.getElementById('signupSuccess');
     const resetError = document.getElementById('resetError');
     const resetPageSuccess = document.getElementById('resetPageSuccess');
-    const childInfoBar = document.getElementById('childInfoBar');
-    const lessonModeBadge = document.getElementById('lessonModeBadge');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const questionText = document.getElementById('questionText');
-    const optionsContainer = document.getElementById('optionsContainer');
-    const feedbackMsg = document.getElementById('feedbackMsg');
-    const nextBtn = document.getElementById('nextQuestionBtn');
-    const progressSpan = document.getElementById('progressText');
 
-    // توابع کمکی
-    function showError(element, message) {
-        element.innerText = message;
-        element.style.display = 'block';
-        setTimeout(() => {
-            element.style.display = 'none';
-        }, 4000);
-    }
-
-    function showSuccess(element, message) {
-        element.innerText = message;
-        element.style.display = 'block';
-        setTimeout(() => {
-            element.style.display = 'none';
-        }, 3000);
-    }
+    // توابع
+    function showError(el, msg) { el.innerText = msg; el.style.display = 'block'; setTimeout(() => el.style.display = 'none', 4000); }
+    function showSuccess(el, msg) { el.innerText = msg; el.style.display = 'block'; setTimeout(() => el.style.display = 'none', 3000); }
 
     function applyModeStyles(mode) {
         document.body.classList.remove('adhd-mode', 'autism-mode', 'neurotypical-mode');
-        if (mode === 'adhd') {
-            document.body.classList.add('adhd-mode');
-            lessonModeBadge.innerText = '🧠 ADHD Mode';
-        } else if (mode === 'autism') {
-            document.body.classList.add('autism-mode');
-            lessonModeBadge.innerText = '🌟 Autism Mode';
-        } else {
-            document.body.classList.add('neurotypical-mode');
-            lessonModeBadge.innerText = '📘 Neurotypical Mode';
-        }
+        if (mode === 'adhd') { document.body.classList.add('adhd-mode'); document.getElementById('lessonModeBadge').innerText = '🧠 ADHD Mode'; }
+        else if (mode === 'autism') { document.body.classList.add('autism-mode'); document.getElementById('lessonModeBadge').innerText = '🌟 Autism Mode'; }
+        else { document.body.classList.add('neurotypical-mode'); document.getElementById('lessonModeBadge').innerText = '📘 Neurotypical Mode'; }
         currentMode = mode;
     }
 
     function renderQuestion() {
         waitingForNext = false;
-        nextBtn.style.display = 'none';
-        feedbackMsg.innerHTML = '';
+        document.getElementById('nextQuestionBtn').style.display = 'none';
+        document.getElementById('feedbackMsg').innerHTML = '';
         const q = questions[currentQuestionIndex];
-        questionText.innerText = q.text;
-        optionsContainer.innerHTML = '';
+        document.getElementById('questionText').innerText = q.text;
+        const container = document.getElementById('optionsContainer');
+        container.innerHTML = '';
         q.options.forEach(opt => {
             const btn = document.createElement('button');
             btn.innerText = opt;
             btn.classList.add('option-btn');
             btn.onclick = () => checkAnswer(opt, q.correct);
-            optionsContainer.appendChild(btn);
+            container.appendChild(btn);
         });
-        progressSpan.innerText = `✨ Question ${currentQuestionIndex + 1} of ${questions.length}`;
+        document.getElementById('progressText').innerText = `✨ Question ${currentQuestionIndex + 1} of ${questions.length}`;
     }
 
     function checkAnswer(selected, correct) {
         if (waitingForNext) return;
         const isCorrect = selected === correct;
-        const allOptions = document.querySelectorAll('.option-btn');
-        allOptions.forEach(btn => btn.disabled = true);
-        
+        document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
         let text = '';
-        if (currentMode === 'adhd') {
-            text = isCorrect ? '✅ YES! ⭐ You rock!' : `❌ Oops! ${correct} is correct.`;
-        } else if (currentMode === 'autism') {
-            text = isCorrect ? 'Correct. ✓ Well done.' : `Not correct. The answer is ${correct}.`;
-        } else {
-            text = isCorrect ? '✔ Correct! Great job!' : `✘ The correct answer is ${correct}.`;
-        }
-        feedbackMsg.innerHTML = text;
+        if (currentMode === 'adhd') text = isCorrect ? '✅ YES! ⭐ You rock!' : `❌ Oops! ${correct} is correct.`;
+        else if (currentMode === 'autism') text = isCorrect ? 'Correct. ✓ Well done.' : `Not correct. The answer is ${correct}.`;
+        else text = isCorrect ? '✔ Correct! Great job!' : `✘ The correct answer is ${correct}.`;
+        document.getElementById('feedbackMsg').innerHTML = text;
         waitingForNext = true;
-        nextBtn.style.display = 'block';
+        document.getElementById('nextQuestionBtn').style.display = 'block';
     }
 
     function nextQuestion() {
         if (!waitingForNext) return;
-        if (currentQuestionIndex + 1 < questions.length) {
-            currentQuestionIndex++;
-            renderQuestion();
-        } else {
-            feedbackMsg.innerHTML = '🎉 You completed the lesson! 🎉';
-            nextBtn.style.display = 'none';
-            progressSpan.innerText = '🏆 Completed! 🏆';
-        }
+        if (currentQuestionIndex + 1 < questions.length) { currentQuestionIndex++; renderQuestion(); }
+        else { document.getElementById('feedbackMsg').innerHTML = '🎉 You completed the lesson! 🎉'; document.getElementById('nextQuestionBtn').style.display = 'none'; document.getElementById('progressText').innerText = '🏆 Completed! 🏆'; }
     }
 
     async function loadLesson(userId) {
-        try {
-            const userRef = ref(db, `users/${userId}`);
-            const snapshot = await get(userRef);
-            if (snapshot.exists()) {
-                const userData = snapshot.val();
-                currentMode = userData.learningMode;
-                applyModeStyles(currentMode);
-                childInfoBar.innerHTML = `👶 ${userData.child.fullName}, Age ${userData.child.age} · ${userData.child.grade}`;
-                currentQuestionIndex = 0;
-                waitingForNext = false;
-                renderQuestion();
-                
-                // نمایش صفحه مناسب
-                loginPage.style.display = 'none';
-                signupPage.style.display = 'none';
-                resetPage.style.display = 'none';
-                lessonPage.style.display = 'block';
-            }
-        } catch (error) {
-            console.error("Error loading lesson:", error);
+        const snapshot = await get(child(ref(db), `users/${userId}`));
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            currentMode = data.learningMode;
+            applyModeStyles(currentMode);
+            document.getElementById('childInfoBar').innerHTML = `👶 ${data.child.fullName}, Age ${data.child.age} · ${data.child.grade}`;
+            currentQuestionIndex = 0;
+            waitingForNext = false;
+            renderQuestion();
+            loginPage.style.display = 'none';
+            signupPage.style.display = 'none';
+            resetPage.style.display = 'none';
+            lessonPage.style.display = 'block';
         }
     }
 
     async function sendWelcomeEmail(email, fullName, learningMode) {
         try {
-            const templateParams = {
+            await emailjs.send("service_dy71bx2", "template_jvpez9b", {
                 to_email: email,
                 fullName: fullName,
                 learningMode: learningMode,
                 message: `Welcome to NeuroLearn! Your child ${fullName} is enrolled in ${learningMode} mode.`
-            };
-            const response = await emailjs.send("service_dy71bx2", "template_jvpez9b", templateParams);
-            console.log("Welcome email sent successfully", response);
+            });
+            console.log("Welcome email sent");
             return true;
         } catch (error) {
-            console.error("Email send error:", error);
+            console.error("Email error:", error);
             return false;
         }
     }
 
-    // ========== راه‌اندازی دکمه‌ها ==========
-    
-    // 1. دکمه Forgot Password
-    const forgotBtn = document.getElementById('forgotPasswordBtn');
-    if (forgotBtn) {
-        forgotBtn.onclick = () => {
-            loginPage.style.display = 'none';
-            resetPage.style.display = 'block';
-            document.getElementById('resetEmail').value = '';
-            resetError.style.display = 'none';
-            resetPageSuccess.style.display = 'none';
-        };
-    }
+    // ========== اتصال دکمه‌ها ==========
+    console.log("Starting to connect buttons...");
 
-    // 2. دکمه Back to Login from Reset
-    const backFromReset = document.getElementById('backToLoginFromReset');
-    if (backFromReset) {
-        backFromReset.onclick = () => {
-            resetPage.style.display = 'none';
-            loginPage.style.display = 'block';
-        };
-    }
+    // دکمه Forgot Password
+    document.getElementById('forgotPasswordBtn').onclick = () => {
+        console.log("Forgot password clicked");
+        loginPage.style.display = 'none';
+        resetPage.style.display = 'block';
+    };
 
-    // 3. دکمه Send Reset Email
-    const sendResetBtn = document.getElementById('sendResetBtn');
-    if (sendResetBtn) {
-        sendResetBtn.onclick = async () => {
-            const email = document.getElementById('resetEmail').value.trim();
-            if (!email) {
-                return showError(resetError, 'Please enter your email address');
-            }
-            try {
-                await sendPasswordResetEmail(auth, email);
-                showSuccess(resetPageSuccess, '✅ Reset link sent! Check your email inbox.');
-                setTimeout(() => {
-                    resetPage.style.display = 'none';
-                    loginPage.style.display = 'block';
-                    document.getElementById('resetEmail').value = '';
-                }, 3000);
-            } catch (err) {
-                console.error("Reset error:", err);
-                if (err.code === 'auth/user-not-found') {
-                    showError(resetError, 'No account found with this email address');
-                } else if (err.code === 'auth/invalid-email') {
-                    showError(resetError, 'Invalid email format');
-                } else {
-                    showError(resetError, err.message);
-                }
-            }
-        };
-    }
+    // دکمه Back from reset
+    document.getElementById('backToLoginFromReset').onclick = () => {
+        console.log("Back from reset clicked");
+        resetPage.style.display = 'none';
+        loginPage.style.display = 'block';
+    };
 
-    // 4. دکمه Show Signup
-    const showSignupBtn = document.getElementById('showSignupBtn');
-    if (showSignupBtn) {
-        showSignupBtn.onclick = () => {
-            loginPage.style.display = 'none';
-            signupPage.style.display = 'block';
-            document.getElementById('signupEmail').value = '';
-            document.getElementById('signupPassword').value = '';
-            document.getElementById('childFullName').value = '';
-            document.getElementById('childAge').value = '';
-            signupError.style.display = 'none';
-            signupSuccess.style.display = 'none';
-        };
-    }
+    // دکمه Send reset email
+    document.getElementById('sendResetBtn').onclick = async () => {
+        console.log("Send reset clicked");
+        const email = document.getElementById('resetEmail').value.trim();
+        if (!email) return showError(resetError, 'Enter your email');
+        try {
+            await sendPasswordResetEmail(auth, email);
+            showSuccess(resetPageSuccess, '✅ Reset link sent!');
+            setTimeout(() => {
+                resetPage.style.display = 'none';
+                loginPage.style.display = 'block';
+            }, 2000);
+        } catch (err) {
+            showError(resetError, err.message);
+        }
+    };
 
-    // 5. دکمه Bac
+    // دکمه Show signup
+    document.getElementById('showSignupBtn').onclick = () => {
+        console.log("Show signup clicked");
+        loginPage.style.display = 'none';
+        signupPage.style.display = 'block';
+    };
+
+    // دکمه Back from signup
+    document.getElementById('backToLogin').onclick = () => {
+        console.log("Back from signup clicked");
+        signupPage.style.display = 'none';
+        loginPage.style.display = 'block';
+    };
+
+    // انتخاب حالت یادگیری
+    document.querySelectorAll('#modeSelectSignup .mode-option').forEach(opt => {
+        opt.onclick = () => {
+            document.querySelectorAll('#modeSelectSignup .mode-option').forEach(o => o.classList.remove('selected'));
+            opt.classList.add('selected');
+            selectedMode = opt.dataset.mode;
+            console.log("Mode selected:", selectedMode);
+        };
+    });
+    document.querySelector('#modeSelectSignup .mode-option:last-child').classList.add('selected');
+
+    // دکمه Complete signup
+    document.getElementById('completeSignupBtn').onclick = async () => {
+        console.log("Complete signup clicked");
+        const email = document.getElementById('signupEmail').value.trim();
+        const password = document.getElementById('signupPassword').value.trim();
+        const fullName = document.getElementById('childFullName').value.trim();
+        const age = document.getElementById('childAge').value;
+        const grade = document.getElementById('childGrade').value;
+
+        if (!email || !password || !fullName || !age) return showError(signupError, 'Fill all fields');
+        if (password.length < 6) return showError(signupError, 'Password min 6 characters');
+
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            await set(ref(db, `users/${userCredential.user.uid}`), {
+                email: email,
+                learningMode: selectedMode,
+                child: { fullName: fullName, age: parseInt(age), grade: grade }
+            });
+            await sendWelcomeEmail(email, fullName, selectedMode);
+            showSuccess(signupSuccess, 'Account created! Redirecting...');
+            setTimeout(() => loadLesson(userCredential.user.uid), 1500);
+        } catch (err) {
+            showError(signupError, err.message);
+        }
+    };
+
+    // دکمه Login
+    document.getElementById('loginBtn').onclick = async () => {
+        console.log("Login clicked");
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value.trim();
+        if (!email || !password) return showError(loginError, 'Enter email and password');
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            await loadLesson(userCredential.user.uid);
+        } catch (err) {
+            showError(loginError, err.message);
+        }
+    };
+
+    // دکمه Logout
+    document.getElementById('logoutBtn').onclick = async () => {
+        console.log("Logout clicked");
+        await signOut(auth);
+        loginPage.style.display = 'block';
+        lessonPage.style.display = 'none';
+    };
+
+    // دکمه Next question
+  
