@@ -1,627 +1,141 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuroLearn | Smart Learning Platform</title>
+    <title>NeuroLearn</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            transition: all 0.3s ease;
-        }
-
-        body.adhd-mode {
-            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
-        }
-
-        body.autism-mode {
-            background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
-        }
-
-        body.neurotypical-mode {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .container {
-            max-width: 550px;
-            width: 100%;
-            background: white;
-            border-radius: 32px;
-            padding: 32px 28px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 28px;
-        }
-
-        .logo h1 {
-            font-size: 2rem;
-            color: #2c3e6d;
-        }
-
-        .logo .tagline {
-            color: #6c757d;
-            font-size: 0.85rem;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: #2d3748;
-            font-size: 0.85rem;
-        }
-
-        input,
-        select {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 16px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        input:focus,
-        select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .mode-options {
-            display: flex;
-            gap: 12px;
-            margin-top: 8px;
-            flex-wrap: wrap;
-        }
-
-        .mode-option {
-            flex: 1;
-            text-align: center;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .mode-option:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .mode-option.selected {
-            border-color: #667eea;
-            background: #f0f4ff;
-        }
-
-        .mode-option.adhd.selected {
-            border-color: #f59e0b;
-            background: #fffbeb;
-        }
-
-        .mode-option.autism.selected {
-            border-color: #10b981;
-            background: #ecfdf5;
-        }
-
-        .mode-option.neurotypical.selected {
-            border-color: #3b82f6;
-            background: #eff6ff;
-        }
-
-        .mode-option .emoji {
-            font-size: 1.8rem;
-            display: block;
-        }
-
-        .mode-option .label {
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 14px;
-            background: #2c3e6d;
-            color: white;
-            border: none;
-            border-radius: 40px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn:hover {
-            background: #1e2f4a;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .error {
-            background: #fee2e2;
-            color: #dc2626;
-            padding: 12px;
-            border-radius: 16px;
-            margin-bottom: 20px;
-            text-align: center;
-            animation: shake 0.5s ease;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-
-        .success {
-            background: #d1fae5;
-            color: #059669;
-            padding: 12px;
-            border-radius: 16px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        hr {
-            margin: 20px 0;
-            border: none;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        .info-note {
-            font-size: 0.7rem;
-            color: #6c757d;
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .card {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 32px;
-            margin: 20px 0;
-            text-align: center;
-        }
-
-        .question {
-            font-size: 2rem;
-            margin: 20px 0;
-        }
-
-        .options {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-
-        .option-btn {
-            padding: 12px 24px;
-            font-size: 20px;
-            border: none;
-            border-radius: 40px;
-            background: #e2e8f0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .option-btn:hover:not(:disabled) {
-            background: #cbd5e1;
-            transform: scale(1.05);
-        }
-
-        .option-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .feedback {
-            font-size: 1.2rem;
-            margin: 15px 0;
-        }
-
-        .next-btn {
-            background: #0f3b2c;
-            margin-top: 10px;
-        }
-
-        .progress {
-            background: #f1f5f9;
-            padding: 10px;
-            border-radius: 20px;
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .header-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .mode-badge {
-            background: #cbd5e1;
-            padding: 6px 14px;
-            border-radius: 40px;
-            font-size: 12px;
-        }
-
-        .logout-btn {
-            background: #dc2626;
-            width: auto;
-            padding: 6px 15px;
-            font-size: 12px;
-            margin: 0;
-        }
-
-        .child-info {
-            background: #f1f5f9;
-            padding: 12px;
-            border-radius: 20px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .back-link {
-            text-align: center;
-            margin-top: 15px;
-            color: #667eea;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-
-        .forgot-link {
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .forgot-link a {
-            color: #667eea;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .forgot-link a:hover {
-            text-decoration: underline;
-        }
-
-        h3 {
-            margin-bottom: 15px;
-            color: #2d3748;
-        }
+        *{box-sizing:border-box;margin:0;padding:0;}
+        body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px;transition:all 0.3s;}
+        body.adhd-mode{background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%);}
+        body.autism-mode{background:linear-gradient(135deg,#10b981 0%,#3b82f6 100%);}
+        body.neurotypical-mode{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);}
+        .container{max-width:550px;width:100%;background:white;border-radius:32px;padding:32px 28px;box-shadow:0 25px 50px -12px rgba(0,0,0,0.25);}
+        .logo{text-align:center;margin-bottom:28px;}
+        .logo h1{font-size:2rem;color:#2c3e6d;}
+        .logo .tagline{color:#6c757d;font-size:0.85rem;}
+        .form-group{margin-bottom:20px;}
+        label{display:block;font-weight:600;margin-bottom:6px;color:#2d3748;font-size:0.85rem;}
+        input,select{width:100%;padding:12px 16px;border:2px solid #e2e8f0;border-radius:16px;font-size:1rem;}
+        .mode-options{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;}
+        .mode-option{flex:1;text-align:center;padding:12px;border:2px solid #e2e8f0;border-radius:20px;cursor:pointer;transition:all 0.3s;}
+        .mode-option.selected{border-color:#667eea;background:#f0f4ff;}
+        .mode-option.adhd.selected{border-color:#f59e0b;background:#fffbeb;}
+        .mode-option.autism.selected{border-color:#10b981;background:#ecfdf5;}
+        .mode-option.neurotypical.selected{border-color:#3b82f6;background:#eff6ff;}
+        .mode-option .emoji{font-size:1.8rem;display:block;}
+        .mode-option .label{font-size:0.8rem;font-weight:600;}
+        .btn{width:100%;padding:14px;background:#2c3e6d;color:white;border:none;border-radius:40px;font-size:1rem;font-weight:bold;cursor:pointer;transition:all 0.3s;}
+        .btn:hover{background:#1e2f4a;transform:translateY(-2px);}
+        .error{background:#fee2e2;color:#dc2626;padding:12px;border-radius:16px;margin-bottom:20px;text-align:center;}
+        .success{background:#d1fae5;color:#059669;padding:12px;border-radius:16px;margin-bottom:20px;text-align:center;}
+        hr{margin:20px 0;border:none;border-top:1px solid #e2e8f0;}
+        .info-note{font-size:0.7rem;color:#6c757d;text-align:center;margin-top:20px;}
+        .card{background:#f8fafc;padding:20px;border-radius:32px;margin:20px 0;text-align:center;}
+        .question{font-size:2rem;margin:20px 0;}
+        .options{display:flex;gap:15px;justify-content:center;margin:20px 0;flex-wrap:wrap;}
+        .option-btn{padding:12px 24px;font-size:20px;border:none;border-radius:40px;background:#e2e8f0;cursor:pointer;transition:all 0.3s;}
+        .option-btn:hover:not(:disabled){background:#cbd5e1;transform:scale(1.05);}
+        .option-btn:disabled{opacity:0.5;cursor:not-allowed;}
+        .feedback{font-size:1.2rem;margin:15px 0;}
+        .next-btn{background:#0f3b2c;margin-top:10px;}
+        .progress{background:#f1f5f9;padding:10px;border-radius:20px;text-align:center;margin-top:15px;}
+        .header-flex{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;}
+        .mode-badge{background:#cbd5e1;padding:6px 14px;border-radius:40px;font-size:12px;}
+        .logout-btn{background:#dc2626;width:auto;padding:6px 15px;font-size:12px;margin:0;}
+        .child-info{background:#f1f5f9;padding:12px;border-radius:20px;margin-bottom:20px;text-align:center;}
+        .back-link{text-align:center;margin-top:15px;color:#667eea;cursor:pointer;font-size:0.85rem;}
+        .forgot-link{text-align:center;margin-top:10px;}
+        .forgot-link a{color:#667eea;cursor:pointer;text-decoration:none;}
+        h3{margin-bottom:15px;color:#2d3748;}
     </style>
 </head>
 <body>
 <div id="app">
-    <!-- Login Page -->
     <div id="loginPage" class="container">
-        <div class="logo">
-            <h1>🧠 NeuroLearn</h1>
-            <div class="tagline">Learning for every brain</div>
-        </div>
-        <div id="loginError" class="error" style="display: none;"></div>
-        <div class="form-group">
-            <label>📧 Email</label>
-            <input type="email" id="loginEmail" placeholder="parent@example.com">
-        </div>
-        <div class="form-group">
-            <label>🔒 Password</label>
-            <input type="password" id="loginPassword" placeholder="••••••">
-        </div>
+        <div class="logo"><h1>🧠 NeuroLearn</h1><div class="tagline">Learning for every brain</div></div>
+        <div id="loginError" class="error" style="display:none"></div>
+        <div class="form-group"><label>📧 Email</label><input type="email" id="loginEmail" placeholder="parent@example.com"></div>
+        <div class="form-group"><label>🔒 Password</label><input type="password" id="loginPassword" placeholder="••••••"></div>
         <button class="btn" id="loginBtn">Sign In</button>
-        <div class="forgot-link">
-            <a id="forgotPasswordBtn">🔑 Forgot Password?</a>
-        </div>
-        <div class="info-note">
-            Don't have an account? <a id="showSignupBtn" style="color: #667eea; cursor: pointer;">Create account</a>
-        </div>
+        <div class="forgot-link"><a id="forgotPasswordBtn">🔑 Forgot Password?</a></div>
+        <div class="info-note">Don't have an account? <a id="showSignupBtn" style="color:#667eea;cursor:pointer">Create account</a></div>
     </div>
 
-    <!-- Signup Page -->
-    <div id="signupPage" style="display: none;" class="container">
-        <div class="logo">
-            <h1>🧠 NeuroLearn</h1>
-            <div class="tagline">Create your account</div>
-        </div>
-        <div id="signupError" class="error" style="display: none;"></div>
-        <div id="signupSuccess" class="success" style="display: none;"></div>
-        
-        <div class="form-group">
-            <label>📧 Parent Email</label>
-            <input type="email" id="signupEmail" placeholder="parent@example.com">
-        </div>
-        <div class="form-group">
-            <label>🔒 Password</label>
-            <input type="password" id="signupPassword" placeholder="min 6 characters">
-        </div>
+    <div id="signupPage" style="display:none" class="container">
+        <div class="logo"><h1>🧠 NeuroLearn</h1><div class="tagline">Create your account</div></div>
+        <div id="signupError" class="error" style="display:none"></div>
+        <div id="signupSuccess" class="success" style="display:none"></div>
+        <div class="form-group"><label>📧 Parent Email</label><input type="email" id="signupEmail" placeholder="parent@example.com"></div>
+        <div class="form-group"><label>🔒 Password</label><input type="password" id="signupPassword" placeholder="min 6 characters"></div>
         <hr>
         <h3>👶 Child's Information</h3>
-        <div class="form-group">
-            <label>Child's Full Name</label>
-            <input type="text" id="childFullName" placeholder="e.g., Emma Smith">
-        </div>
-        <div class="form-group">
-            <label>Age</label>
-            <input type="number" id="childAge" placeholder="Age">
-        </div>
-        <div class="form-group">
-            <label>Grade</label>
-            <select id="childGrade">
-                <option>Kindergarten</option>
-                <option selected>Grade 1</option>
-                <option>Grade 2</option>
-                <option>Grade 3</option>
-                <option>Grade 4</option>
-                <option>Grade 5</option>
-                <option>Grade 6</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>🧠 Learning Mode</label>
-            <div class="mode-options" id="modeSelectSignup">
-                <div class="mode-option" data-mode="adhd">
-                    <span class="emoji">🧠</span>
-                    <span class="label">ADHD</span>
-                </div>
-                <div class="mode-option" data-mode="autism">
-                    <span class="emoji">🌟</span>
-                    <span class="label">Autism</span>
-                </div>
-                <div class="mode-option" data-mode="neurotypical">
-                    <span class="emoji">📘</span>
-                    <span class="label">Neurotypical</span>
-                </div>
-            </div>
-        </div>
+        <div class="form-group"><label>Child's Full Name</label><input type="text" id="childFullName" placeholder="e.g., Emma Smith"></div>
+        <div class="form-group"><label>Age</label><input type="number" id="childAge" placeholder="Age"></div>
+        <div class="form-group"><label>Grade</label><select id="childGrade"><option>Kindergarten</option><option selected>Grade 1</option><option>Grade 2</option><option>Grade 3</option><option>Grade 4</option><option>Grade 5</option><option>Grade 6</option></select></div>
+        <div class="form-group"><label>🧠 Learning Mode</label><div class="mode-options" id="modeSelectSignup"><div class="mode-option" data-mode="adhd"><span class="emoji">🧠</span><span class="label">ADHD</span></div><div class="mode-option" data-mode="autism"><span class="emoji">🌟</span><span class="label">Autism</span></div><div class="mode-option" data-mode="neurotypical"><span class="emoji">📘</span><span class="label">Neurotypical</span></div></div></div>
         <button class="btn" id="completeSignupBtn">Create Account & Start Learning</button>
         <div class="back-link" id="backToLogin">← Back to Sign In</div>
     </div>
 
-    <!-- Reset Password Page -->
-    <div id="resetPage" style="display: none;" class="container">
-        <div class="logo">
-            <h1>🔐 Reset Password</h1>
-            <div class="tagline">We'll send you a reset link</div>
-        </div>
-        <div id="resetError" class="error" style="display: none;"></div>
-        <div id="resetPageSuccess" class="success" style="display: none;"></div>
-        <div class="form-group">
-            <label>📧 Email Address</label>
-            <input type="email" id="resetEmail" placeholder="parent@example.com">
-        </div>
+    <div id="resetPage" style="display:none" class="container">
+        <div class="logo"><h1>🔐 Reset Password</h1><div class="tagline">We'll send you a reset link</div></div>
+        <div id="resetError" class="error" style="display:none"></div>
+        <div id="resetPageSuccess" class="success" style="display:none"></div>
+        <div class="form-group"><label>📧 Email Address</label><input type="email" id="resetEmail" placeholder="parent@example.com"></div>
         <button class="btn" id="sendResetBtn">Send Reset Email</button>
         <div class="back-link" id="backToLoginFromReset">← Back to Sign In</div>
     </div>
 
-    <!-- Lesson Page -->
-    <div id="lessonPage" style="display: none;" class="container">
-        <div class="header-flex">
-            <h1 style="font-size: 1.6rem;">🧠 NeuroLearn</h1>
-            <button id="logoutBtn" class="btn logout-btn">🚪 Sign Out</button>
-        </div>
+    <div id="lessonPage" style="display:none" class="container">
+        <div class="header-flex"><h1 style="font-size:1.6rem">🧠 NeuroLearn</h1><button id="logoutBtn" class="btn logout-btn">🚪 Sign Out</button></div>
         <div class="child-info" id="childInfoBar"></div>
         <div class="mode-badge" id="lessonModeBadge">Mode: --</div>
         <h2>🍎 Apple Addition</h2>
         <p>Let's add numbers up to 10</p>
-        <div class="card">
-            <div class="question" id="questionText">2 + 1 = ?</div>
-            <div class="options" id="optionsContainer"></div>
-            <div id="feedbackMsg" class="feedback"></div>
-        </div>
+        <div class="card"><div class="question" id="questionText">2 + 1 = ?</div><div class="options" id="optionsContainer"></div><div id="feedbackMsg" class="feedback"></div></div>
         <div class="progress" id="progressText">✨ Question 1 of 3</div>
-        <button id="nextQuestionBtn" class="btn next-btn" style="display: none;">Next ➡</button>
+        <button id="nextQuestionBtn" class="btn next-btn" style="display:none">Next ➡</button>
         <div class="info-note">🍁 Learning for every brain</div>
     </div>
 </div>
 
-<!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-database-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
 <script>
-    // Firebase Configuration
-    const firebaseConfig = {
-        apiKey: "AIzaSyB4Sd4MO7I8HeX42X0CZxbqLtZp7wLwkbU",
-        authDomain: "neurolearn-be081.firebaseapp.com",
-        projectId: "neurolearn-be081",
-        storageBucket: "neurolearn-be081.firebasestorage.app",
-        messagingSenderId: "852782942251",
-        appId: "1:852782942251:web:77a059e9257606022d426e",
-        databaseURL: "https://neurolearn-be081-default-rtdb.firebaseio.com/"
-    };
-
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.database();
-
-    // Initialize EmailJS
-    emailjs.init("waATHA92qJSL5qD8B");
-
-    // Questions
-    const questions = [
-        { text: "2 + 1 = ?", correct: 3, options: [2, 3, 4] },
-        { text: "3 + 2 = ?", correct: 5, options: [4, 5, 6] },
-        { text: "4 + 0 = ?", correct: 4, options: [3, 4, 5] }
-    ];
-
-    // Variables
-    let currentQuestionIndex = 0;
-    let currentMode = 'neurotypical';
-    let waitingForNext = false;
-    let selectedMode = 'neurotypical';
-
-    // DOM Elements
-    const loginPage = document.getElementById('loginPage');
-    const signupPage = document.getElementById('signupPage');
-    const resetPage = document.getElementById('resetPage');
-    const lessonPage = document.getElementById('lessonPage');
-    const loginError = document.getElementById('loginError');
-    const signupError = document.getElementById('signupError');
-    const signupSuccess = document.getElementById('signupSuccess');
-    const resetError = document.getElementById('resetError');
-    const resetPageSuccess = document.getElementById('resetPageSuccess');
-
-    // Helper Functions
-    function showError(element, message) {
-        element.innerText = message;
-        element.style.display = 'block';
-        setTimeout(() => {
-            element.style.display = 'none';
-        }, 4000);
-    }
-
-    function showSuccess(element, message) {
-        element.innerText = message;
-        element.style.display = 'block';
-        setTimeout(() => {
-            element.style.display = 'none';
-        }, 3000);
-    }
-
-    function applyModeStyles(mode) {
-        document.body.classList.remove('adhd-mode', 'autism-mode', 'neurotypical-mode');
-        if (mode === 'adhd') {
-            document.body.classList.add('adhd-mode');
-            document.getElementById('lessonModeBadge').innerText = '🧠 ADHD Mode';
-        } else if (mode === 'autism') {
-            document.body.classList.add('autism-mode');
-            document.getElementById('lessonModeBadge').innerText = '🌟 Autism Mode';
-        } else {
-            document.body.classList.add('neurotypical-mode');
-            document.getElementById('lessonModeBadge').innerText = '📘 Neurotypical Mode';
-        }
-        currentMode = mode;
-    }
-
-    function renderQuestion() {
-        waitingForNext = false;
-        document.getElementById('nextQuestionBtn').style.display = 'none';
-        document.getElementById('feedbackMsg').innerHTML = '';
-        const q = questions[currentQuestionIndex];
-        document.getElementById('questionText').innerText = q.text;
-        const container = document.getElementById('optionsContainer');
-        container.innerHTML = '';
-        q.options.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.innerText = opt;
-            btn.classList.add('option-btn');
-            btn.onclick = () => checkAnswer(opt, q.correct);
-            container.appendChild(btn);
-        });
-        document.getElementById('progressText').innerText = `✨ Question ${currentQuestionIndex + 1} of ${questions.length}`;
-    }
-
-    function checkAnswer(selected, correct) {
-        if (waitingForNext) return;
-        const isCorrect = selected === correct;
-        document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
-        let text = '';
-        if (currentMode === 'adhd') {
-            text = isCorrect ? '✅ YES! ⭐ You rock!' : `❌ Oops! ${correct} is correct.`;
-        } else if (currentMode === 'autism') {
-            text = isCorrect ? 'Correct. ✓ Well done.' : `Not correct. The answer is ${correct}.`;
-        } else {
-            text = isCorrect ? '✔ Correct! Great job!' : `✘ The correct answer is ${correct}.`;
-        }
-        document.getElementById('feedbackMsg').innerHTML = text;
-        waitingForNext = true;
-        document.getElementById('nextQuestionBtn').style.display = 'block';
-    }
-
-    function nextQuestion() {
-        if (!waitingForNext) return;
-        if (currentQuestionIndex + 1 < questions.length) {
-            currentQuestionIndex++;
-            renderQuestion();
-        } else {
-            document.getElementById('feedbackMsg').innerHTML = '🎉 You completed the lesson! 🎉';
-            document.getElementById('nextQuestionBtn').style.display = 'none';
-            document.getElementById('progressText').innerText = '🏆 Completed! 🏆';
-        }
-    }
-
-    async function loadLesson(userId) {
-        try {
-            const snapshot = await db.ref(`users/${userId}`).once('value');
-            if (snapshot.exists()) {
-                const data = snapshot.val();
-                currentMode = data.learningMode;
-                applyModeStyles(currentMode);
-                document.getElementById('childInfoBar').innerHTML = `👶 ${data.child.fullName}, Age ${data.child.age} · ${data.child.grade}`;
-                currentQuestionIndex = 0;
-                waitingForNext = false;
-                renderQuestion();
-                loginPage.style.display = 'none';
-                signupPage.style.display = 'none';
-                resetPage.style.display = 'none';
-                lessonPage.style.display = 'block';
-            }
-        } catch (error) {
-            console.error("Error loading lesson:", error);
-        }
-    }
-
-    async function sendWelcomeEmail(email, fullName, learningMode) {
-        try {
-            const modeName = learningMode === 'adhd' ? 'ADHD' : (learningMode === 'autism' ? 'Autism' : 'Neurotypical');
-            const response = await emailjs.send("service_dy71bx2", "template_jvpez9b", {
-                to_email: email,
-                fullName: fullName,
-                learningMode: modeName,
-                message: `Welcome to NeuroLearn! Your child ${fullName} is enrolled in ${modeName} mode.`
-            });
-            console.log("Welcome email sent successfully", response);
-            return true;
-        } catch (error) {
-            console.error("Email send error:", error);
-            return false;
-        }
-    }
-
-    // ========== 
+const firebaseConfig={apiKey:"AIzaSyB4Sd4MO7I8HeX42X0CZxbqLtZp7wLwkbU",authDomain:"neurolearn-be081.firebaseapp.com",projectId:"neurolearn-be081",storageBucket:"neurolearn-be081.firebasestorage.app",messagingSenderId:"852782942251",appId:"1:852782942251:web:77a059e9257606022d426e",databaseURL:"https://neurolearn-be081-default-rtdb.firebaseio.com/"};
+firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth();
+const db=firebase.database();
+emailjs.init("waATHA92qJSL5qD8B");
+const questions=[{text:"2 + 1 = ?",correct:3,options:[2,3,4]},{text:"3 + 2 = ?",correct:5,options:[4,5,6]},{text:"4 + 0 = ?",correct:4,options:[3,4,5]}];
+let currentQuestionIndex=0,currentMode="neurotypical",waitingForNext=false,selectedMode="neurotypical";
+const loginPage=document.getElementById("loginPage"),signupPage=document.getElementById("signupPage"),resetPage=document.getElementById("resetPage"),lessonPage=document.getElementById("lessonPage"),loginError=document.getElementById("loginError"),signupError=document.getElementById("signupError"),signupSuccess=document.getElementById("signupSuccess"),resetError=document.getElementById("resetError"),resetPageSuccess=document.getElementById("resetPageSuccess");
+function showError(e,m){e.innerText=m;e.style.display="block";setTimeout(()=>e.style.display="none",4000);}
+function showSuccess(e,m){e.innerText=m;e.style.display="block";setTimeout(()=>e.style.display="none",3000);}
+function applyModeStyles(m){document.body.classList.remove("adhd-mode","autism-mode","neurotypical-mode");if(m==="adhd"){document.body.classList.add("adhd-mode");document.getElementById("lessonModeBadge").innerText="🧠 ADHD Mode";}else if(m==="autism"){document.body.classList.add("autism-mode");document.getElementById("lessonModeBadge").innerText="🌟 Autism Mode";}else{document.body.classList.add("neurotypical-mode");document.getElementById("lessonModeBadge").innerText="📘 Neurotypical Mode";}currentMode=m;}
+function renderQuestion(){waitingForNext=false;document.getElementById("nextQuestionBtn").style.display="none";document.getElementById("feedbackMsg").innerHTML="";const q=questions[currentQuestionIndex];document.getElementById("questionText").innerText=q.text;const c=document.getElementById("optionsContainer");c.innerHTML="";q.options.forEach(o=>{const b=document.createElement("button");b.innerText=o;b.classList.add("option-btn");b.onclick=()=>checkAnswer(o,q.correct);c.appendChild(b);});document.getElementById("progressText").innerText=`✨ Question ${currentQuestionIndex+1} of ${questions.length}`;}
+function checkAnswer(s,c){if(waitingForNext)return;const isCorrect=s===c;document.querySelectorAll(".option-btn").forEach(b=>b.disabled=true);let t="";if(currentMode==="adhd"){t=isCorrect?"✅ YES! ⭐ You rock!":`❌ Oops! ${c} is correct.`;}else if(currentMode==="autism"){t=isCorrect?"Correct. ✓ Well done.":`Not correct. The answer is ${c}.`;}else{t=isCorrect?"✔ Correct! Great job!":`✘ The correct answer is ${c}.`;}document.getElementById("feedbackMsg").innerHTML=t;waitingForNext=true;document.getElementById("nextQuestionBtn").style.display="block";}
+function nextQuestion(){if(!waitingForNext)return;if(currentQuestionIndex+1<questions.length){currentQuestionIndex++;renderQuestion();}else{document.getElementById("feedbackMsg").innerHTML="🎉 You completed the lesson! 🎉";document.getElementById("nextQuestionBtn").style.display="none";document.getElementById("progressText").innerText="🏆 Completed! 🏆";}}
+async function loadLesson(uid){const s=await db.ref(`users/${uid}`).once("value");if(s.exists()){const d=s.val();currentMode=d.learningMode;applyModeStyles(currentMode);document.getElementById("childInfoBar").innerHTML=`👶 ${d.child.fullName}, Age ${d.child.age} · ${d.child.grade}`;currentQuestionIndex=0;waitingForNext=false;renderQuestion();loginPage.style.display="none";signupPage.style.display="none";resetPage.style.display="none";lessonPage.style.display="block";}}
+async function sendWelcomeEmail(e,f,m){const mn=m==="adhd"?"ADHD":(m==="autism"?"Autism":"Neurotypical");await emailjs.send("service_dy71bx2","template_jvpez9b",{to_email:e,fullName:f,learningMode:mn,message:`Welcome to NeuroLearn! Your child ${f} is enrolled in ${mn} mode.`});}
+document.getElementById("forgotPasswordBtn").onclick=()=>{loginPage.style.display="none";resetPage.style.display="block";};
+document.getElementById("backToLoginFromReset").onclick=()=>{resetPage.style.display="none";loginPage.style.display="block";};
+document.getElementById("sendResetBtn").onclick=async()=>{const e=document.getElementById("resetEmail").value.trim();if(!e)return showError(resetError,"Please enter your email address");try{await auth.sendPasswordResetEmail(e);showSuccess(resetPageSuccess,"✅ Reset link sent! Check your email inbox.");setTimeout(()=>{resetPage.style.display="none";loginPage.style.display="block";},3000);}catch(err){showError(resetError,err.code==="auth/user-not-found"?"No account found with this email":err.message);}};
+document.getElementById("showSignupBtn").onclick=()=>{loginPage.style.display="none";signupPage.style.display="block";};
+document.getElementById("backToLogin").onclick=()=>{signupPage.style.display="none";loginPage.style.display="block";};
+document.querySelectorAll("#modeSelectSignup .mode-option").forEach(o=>{o.onclick=()=>{document.querySelectorAll("#modeSelectSignup .mode-option").forEach(x=>x.classList.remove("selected"));o.classList.add("selected");selectedMode=o.dataset.mode;};});
+document.querySelector("#modeSelectSignup .mode-option:last-child").classList.add("selected");
+document.getElementById("completeSignupBtn").onclick=async()=>{const e=document.getElementById("signupEmail").value.trim(),p=document.getElementById("signupPassword").value.trim(),f=document.getElementById("childFullName").value.trim(),a=document.getElementById("childAge").value,g=document.getElementById("childGrade").value;if(!e||!p||!f||!a)return showError(signupError,"Please fill all fields");if(p.length<6)return showError(signupError,"Password must be at least 6 characters");try{const u=await auth.createUserWithEmailAndPassword(e,p);await db.ref(`users/${u.user.uid}`).set({email:e,learningMode:selectedMode,child:{fullName:f,age:parseInt(a),grade:g}});await sendWelcomeEmail(e,f,selectedMode);showSuccess(signupSuccess,"Account created successfully! Redirecting...");setTimeout(()=>loadLesson(u.user.uid),1500);}catch(err){showError(signupError,err.code==="auth/email-already-in-use"?"This email is already registered":err.message);}};
+document.getElementById("loginBtn").onclick=async()=>{const e=document.getElementById("loginEmail").value.trim(),p=document.getElementById("loginPassword").value.trim();if(!e||!p)return showError(loginError,"Please enter email and password");try{const u=await auth.signInWithEmailAndPassword(e,p);await loadLesson(u.user.uid);}catch(err){showError(loginError,err.code==="auth/user-not-found"?"No account found":"Incorrect password");}};
+document.getElementById("logoutBtn").onclick=async()=>{await auth.signOut();loginPage.style.display="block";lessonPage.style.display="none";};
+document.getElementById("nextQuestionBtn").onclick=nextQuestion;
+auth.onAuthStateChanged(async(u)=>{if(u&&lessonPage.style.display!=="block"){await loadLesson(u.uid);}});
+</script>
+</body>
+</html>
+```
