@@ -223,12 +223,20 @@
     </div>
 </div>
 
+<script type="text/javascript">
+    // ابتدا EmailJS رو مقداردهی می‌کنیم
+    (function(){
+        emailjs.init("waATHA92qJSL5qD8B");
+    })();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script type="module">
+    // ایمپورت Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
     import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js";
 
+    // تنظیمات Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyB4Sd4MO7I8HeX42X0CZxbqLtZp7wLwkbU",
         authDomain: "neurolearn-be081.firebaseapp.com",
@@ -239,24 +247,25 @@
         databaseURL: "https://neurolearn-be081-default-rtdb.firebaseio.com/"
     };
 
+    // مقداردهی اولیه Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getDatabase(app);
 
-    emailjs.init("waATHA92qJSL5qD8B");
-
+    // سوالات درس
     const questions = [
         { text: "2 + 1 = ?", correct: 3, options: [2, 3, 4] },
         { text: "3 + 2 = ?", correct: 5, options: [4, 5, 6] },
         { text: "4 + 0 = ?", correct: 4, options: [3, 4, 5] }
     ];
 
+    // متغیرهای سراسری
     let currentQuestionIndex = 0;
-    let currentMode = null;
+    let currentMode = 'neurotypical';
     let waitingForNext = false;
     let currentUserId = null;
-    let currentChildData = null;
 
+    // گرفتن المنت‌ها
     const loginPage = document.getElementById('loginPage');
     const signupPage = document.getElementById('signupPage');
     const resetPage = document.getElementById('resetPage');
@@ -275,31 +284,34 @@
     const nextBtn = document.getElementById('nextQuestionBtn');
     const progressSpan = document.getElementById('progressText');
 
-    function showError(el, msg) { 
-        el.innerText = msg; 
-        el.style.display = 'block'; 
-        setTimeout(() => el.style.display = 'none', 4000); 
+    // توابع کمکی
+    function showError(element, message) {
+        element.innerText = message;
+        element.style.display = 'block';
+        setTimeout(() => {
+            element.style.display = 'none';
+        }, 4000);
     }
-    
-    function showSuccess(el, msg) { 
-        el.innerText = msg; 
-        el.style.display = 'block'; 
-        setTimeout(() => el.style.display = 'none', 3000); 
+
+    function showSuccess(element, message) {
+        element.innerText = message;
+        element.style.display = 'block';
+        setTimeout(() => {
+            element.style.display = 'none';
+        }, 3000);
     }
 
     function applyModeStyles(mode) {
         document.body.classList.remove('adhd-mode', 'autism-mode', 'neurotypical-mode');
-        if (mode === 'adhd') { 
-            document.body.classList.add('adhd-mode'); 
-            lessonModeBadge.innerText = '🧠 ADHD Mode'; 
-        }
-        else if (mode === 'autism') { 
-            document.body.classList.add('autism-mode'); 
-            lessonModeBadge.innerText = '🌟 Autism Mode'; 
-        }
-        else { 
-            document.body.classList.add('neurotypical-mode'); 
-            lessonModeBadge.innerText = '📘 Neurotypical Mode'; 
+        if (mode === 'adhd') {
+            document.body.classList.add('adhd-mode');
+            lessonModeBadge.innerText = '🧠 ADHD Mode';
+        } else if (mode === 'autism') {
+            document.body.classList.add('autism-mode');
+            lessonModeBadge.innerText = '🌟 Autism Mode';
+        } else {
+            document.body.classList.add('neurotypical-mode');
+            lessonModeBadge.innerText = '📘 Neurotypical Mode';
         }
         currentMode = mode;
     }
@@ -324,11 +336,17 @@
     function checkAnswer(selected, correct) {
         if (waitingForNext) return;
         const isCorrect = selected === correct;
-        document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
+        const allOptions = document.querySelectorAll('.option-btn');
+        allOptions.forEach(btn => btn.disabled = true);
+        
         let text = '';
-        if (currentMode === 'adhd') text = isCorrect ? '✅ YES! ⭐ You rock!' : `❌ Oops! ${correct} is correct.`;
-        else if (currentMode === 'autism') text = isCorrect ? 'Correct. ✓ Well done.' : `Not correct. The answer is ${correct}.`;
-        else text = isCorrect ? '✔ Correct! Great job!' : `✘ The correct answer is ${correct}.`;
+        if (currentMode === 'adhd') {
+            text = isCorrect ? '✅ YES! ⭐ You rock!' : `❌ Oops! ${correct} is correct.`;
+        } else if (currentMode === 'autism') {
+            text = isCorrect ? 'Correct. ✓ Well done.' : `Not correct. The answer is ${correct}.`;
+        } else {
+            text = isCorrect ? '✔ Correct! Great job!' : `✘ The correct answer is ${correct}.`;
+        }
         feedbackMsg.innerHTML = text;
         waitingForNext = true;
         nextBtn.style.display = 'block';
@@ -336,32 +354,37 @@
 
     function nextQuestion() {
         if (!waitingForNext) return;
-        if (currentQuestionIndex + 1 < questions.length) { 
-            currentQuestionIndex++; 
-            renderQuestion(); 
-        }
-        else { 
-            feedbackMsg.innerHTML = '🎉 You completed the lesson! 🎉'; 
-            nextBtn.style.display = 'none'; 
-            progressSpan.innerText = '🏆 Completed! 🏆'; 
+        if (currentQuestionIndex + 1 < questions.length) {
+            currentQuestionIndex++;
+            renderQuestion();
+        } else {
+            feedbackMsg.innerHTML = '🎉 You completed the lesson! 🎉';
+            nextBtn.style.display = 'none';
+            progressSpan.innerText = '🏆 Completed! 🏆';
         }
     }
 
     async function loadLesson(userId) {
-        const snapshot = await get(child(ref(db), `users/${userId}`));
-        if (snapshot.exists()) {
-            const userData = snapshot.val();
-            currentChildData = userData.child;
-            currentMode = userData.learningMode;
-            applyModeStyles(currentMode);
-            childInfoBar.innerHTML = `👶 ${currentChildData.fullName}, Age ${currentChildData.age} · ${currentChildData.grade}`;
-            currentQuestionIndex = 0;
-            waitingForNext = false;
-            renderQuestion();
-            loginPage.style.display = 'none';
-            signupPage.style.display = 'none';
-            resetPage.style.display = 'none';
-            lessonPage.style.display = 'block';
+        try {
+            const userRef = ref(db, `users/${userId}`);
+            const snapshot = await get(userRef);
+            if (snapshot.exists()) {
+                const userData = snapshot.val();
+                currentMode = userData.learningMode;
+                applyModeStyles(currentMode);
+                childInfoBar.innerHTML = `👶 ${userData.child.fullName}, Age ${userData.child.age} · ${userData.child.grade}`;
+                currentQuestionIndex = 0;
+                waitingForNext = false;
+                renderQuestion();
+                
+                // نمایش صفحه مناسب
+                loginPage.style.display = 'none';
+                signupPage.style.display = 'none';
+                resetPage.style.display = 'none';
+                lessonPage.style.display = 'block';
+            }
+        } catch (error) {
+            console.error("Error loading lesson:", error);
         }
     }
 
@@ -382,83 +405,71 @@
         }
     }
 
-    // Mode selection for signup
-    let selectedMode = 'neurotypical';
-    const modeOptions = document.querySelectorAll('#modeSelectSignup .mode-option');
-    modeOptions.forEach(opt => {
-        opt.onclick = () => {
-            modeOptions.forEach(o => o.classList.remove('selected'));
-            opt.classList.add('selected');
-            selectedMode = opt.dataset.mode;
+    // ========== راه‌اندازی دکمه‌ها ==========
+    
+    // 1. دکمه Forgot Password
+    const forgotBtn = document.getElementById('forgotPasswordBtn');
+    if (forgotBtn) {
+        forgotBtn.onclick = () => {
+            loginPage.style.display = 'none';
+            resetPage.style.display = 'block';
+            document.getElementById('resetEmail').value = '';
+            resetError.style.display = 'none';
+            resetPageSuccess.style.display = 'none';
         };
-    });
-    modeOptions[2].classList.add('selected');
+    }
 
-    // FORGOT PASSWORD BUTTON
-    document.getElementById('forgotPasswordBtn').onclick = () => {
-        loginPage.style.display = 'none';
-        resetPage.style.display = 'block';
-        document.getElementById('resetEmail').value = '';
-        resetError.style.display = 'none';
-        resetPageSuccess.style.display = 'none';
-    };
+    // 2. دکمه Back to Login from Reset
+    const backFromReset = document.getElementById('backToLoginFromReset');
+    if (backFromReset) {
+        backFromReset.onclick = () => {
+            resetPage.style.display = 'none';
+            loginPage.style.display = 'block';
+        };
+    }
 
-    document.getElementById('backToLoginFromReset').onclick = () => {
-        resetPage.style.display = 'none';
-        loginPage.style.display = 'block';
-    };
-
-    document.getElementById('sendResetBtn').onclick = async () => {
-        const email = document.getElementById('resetEmail').value.trim();
-        
-        if (!email) {
-            return showError(resetError, 'Please enter your email address');
-        }
-        
-        try {
-            await sendPasswordResetEmail(auth, email);
-            showSuccess(resetPageSuccess, '✅ Reset link sent! Check your email inbox.');
-            setTimeout(() => {
-                resetPage.style.display = 'none';
-                loginPage.style.display = 'block';
-                document.getElementById('resetEmail').value = '';
-            }, 3000);
-        } catch (err) {
-            console.error("Reset error:", err);
-            if (err.code === 'auth/user-not-found') {
-                showError(resetError, 'No account found with this email address');
-            } else if (err.code === 'auth/invalid-email') {
-                showError(resetError, 'Invalid email format');
-            } else {
-                showError(resetError, err.message);
+    // 3. دکمه Send Reset Email
+    const sendResetBtn = document.getElementById('sendResetBtn');
+    if (sendResetBtn) {
+        sendResetBtn.onclick = async () => {
+            const email = document.getElementById('resetEmail').value.trim();
+            if (!email) {
+                return showError(resetError, 'Please enter your email address');
             }
-        }
-    };
+            try {
+                await sendPasswordResetEmail(auth, email);
+                showSuccess(resetPageSuccess, '✅ Reset link sent! Check your email inbox.');
+                setTimeout(() => {
+                    resetPage.style.display = 'none';
+                    loginPage.style.display = 'block';
+                    document.getElementById('resetEmail').value = '';
+                }, 3000);
+            } catch (err) {
+                console.error("Reset error:", err);
+                if (err.code === 'auth/user-not-found') {
+                    showError(resetError, 'No account found with this email address');
+                } else if (err.code === 'auth/invalid-email') {
+                    showError(resetError, 'Invalid email format');
+                } else {
+                    showError(resetError, err.message);
+                }
+            }
+        };
+    }
 
-    // SHOW SIGNUP PAGE
-    document.getElementById('showSignupBtn').onclick = () => {
-        loginPage.style.display = 'none';
-        signupPage.style.display = 'block';
-        document.getElementById('signupEmail').value = '';
-        document.getElementById('signupPassword').value = '';
-        document.getElementById('childFullName').value = '';
-        document.getElementById('childAge').value = '';
-        signupError.style.display = 'none';
-        signupSuccess.style.display = 'none';
-    };
+    // 4. دکمه Show Signup
+    const showSignupBtn = document.getElementById('showSignupBtn');
+    if (showSignupBtn) {
+        showSignupBtn.onclick = () => {
+            loginPage.style.display = 'none';
+            signupPage.style.display = 'block';
+            document.getElementById('signupEmail').value = '';
+            document.getElementById('signupPassword').value = '';
+            document.getElementById('childFullName').value = '';
+            document.getElementById('childAge').value = '';
+            signupError.style.display = 'none';
+            signupSuccess.style.display = 'none';
+        };
+    }
 
-    document.getElementById('backToLogin').onclick = () => {
-        signupPage.style.display = 'none';
-        loginPage.style.display = 'block';
-    };
-
-    // COMPLETE SIGNUP BUTTON
-    document.getElementById('completeSignupBtn').onclick = async () => {
-        const email = document.getElementById('signupEmail').value.trim();
-        const password = document.getElementById('signupPassword').value.trim();
-        const fullName = document.getElementById('childFullName').value.trim();
-        const age = document.getElementById('childAge').value;
-        const grade = document.getElementById('childGrade').value;
-
-        if (!email || !password || !fullName || !age) {
-            return showError(signupError, 'Please fill all f
+    // 5. دکمه Bac
