@@ -242,10 +242,8 @@
     const auth = getAuth(app);
     const db = getDatabase(app);
 
-    // Initialize EmailJS (optional - disabled for now to avoid errors)
-    if (typeof emailjs !== 'undefined') {
-        emailjs.init("waATHA92qJSL5qD8B");
-    }
+    // Initialize EmailJS
+    emailjs.init("waATHA92qJSL5qD8B");
 
     const questions = [
         { text: "2 + 1 = ?", correct: 3, options: [2, 3, 4] },
@@ -360,11 +358,24 @@
         lessonPage.style.display = 'block';
     }
 
-    // Welcome email function (disabled to avoid errors - can be enabled later)
+    // ==================== WELCOME EMAIL (ACTIVE) ====================
     async function sendWelcomeEmail(email, fullName, learningMode) {
-        console.log(`📧 Welcome email would be sent to: ${email} for ${fullName} (${learningMode})`);
-        console.log(`To enable EmailJS, configure service and template IDs.`);
-        return true;
+        try {
+            const templateParams = {
+                to_email: email,
+                fullName: fullName,
+                learningMode: learningMode,
+                message: `Welcome to NeuroLearn! Your child ${fullName} is enrolled in ${learningMode} mode.`
+            };
+            
+            const response = await emailjs.send("service_dy71bx2", "template_jvpez9b", templateParams);
+            console.log("✅ Welcome email sent successfully!", response);
+            return true;
+            
+        } catch (error) {
+            console.error("❌ EmailJS Error:", error);
+            return false;
+        }
     }
 
     // ==================== MODE SELECTION ====================
@@ -442,7 +453,7 @@
         loginError.style.display = 'none';
     };
 
-    // ==================== SIGNUP BUTTON ====================
+    // ==================== SIGNUP BUTTON (WITH EMAIL) ====================
     document.getElementById('completeSignupBtn').onclick = async () => {
         const email = document.getElementById('signupEmail').value.trim();
         const password = document.getElementById('signupPassword').value.trim();
@@ -452,104 +463,4 @@
         const mode = selectedMode;
 
         if (!email || !password || !fullName || !age) {
-            return showError(signupError, 'Please fill all fields');
-        }
-        if (password.length < 6) {
-            return showError(signupError, 'Password must be at least 6 characters');
-        }
-        if (age < 3 || age > 18) {
-            return showError(signupError, 'Age must be between 3 and 18');
-        }
-        
-        try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            
-            await set(ref(db, 'users/' + userCredential.user.uid), {
-                email: email,
-                childName: fullName,
-                age: parseInt(age),
-                grade: grade,
-                mode: mode,
-                createdAt: new Date().toISOString()
-            });
-            
-            sendWelcomeEmail(email, fullName, mode);
-            
-            showSuccess(signupSuccess, '✅ Account created! Redirecting...');
-            
-            setTimeout(() => {
-                loadLesson({ fullName: fullName, age: age, grade: grade }, mode);
-            }, 2000);
-            
-        } catch (err) {
-            console.error("Signup error:", err);
-            if (err.code === 'auth/email-already-in-use') {
-                showError(signupError, 'This email is already registered');
-            } else if (err.code === 'auth/weak-password') {
-                showError(signupError, 'Password is too weak');
-            } else {
-                showError(signupError, err.message);
-            }
-        }
-    };
-
-    // ==================== LOGIN BUTTON ====================
-    document.getElementById('loginBtn').onclick = async () => {
-        const email = document.getElementById('loginEmail').value.trim();
-        const password = document.getElementById('loginPassword').value.trim();
-        
-        if (!email || !password) {
-            return showError(loginError, 'Please enter email and password');
-        }
-        
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const userId = userCredential.user.uid;
-            
-            const userRef = ref(db, 'users/' + userId);
-            const snapshot = await get(userRef);
-            
-            if (snapshot.exists()) {
-                const userData = snapshot.val();
-                loadLesson(
-                    { 
-                        fullName: userData.childName || userData.fullName || 'Student', 
-                        age: userData.age || 5, 
-                        grade: userData.grade || 'Grade 1' 
-                    },
-                    userData.mode || 'neurotypical'
-                );
-            } else {
-                showError(loginError, 'User data not found. Please contact support.');
-            }
-        } catch (err) {
-            console.error("Login error:", err);
-            if (err.code === 'auth/user-not-found') {
-                showError(loginError, 'No account found with this email');
-            } else if (err.code === 'auth/wrong-password') {
-                showError(loginError, 'Incorrect password');
-            } else if (err.code === 'auth/invalid-email') {
-                showError(loginError, 'Invalid email format');
-            } else {
-                showError(loginError, err.message);
-            }
-        }
-    };
-
-    // ==================== NEXT QUESTION BUTTON ====================
-    nextBtn.onclick = nextQuestion;
-
-    // ==================== LOGOUT BUTTON ====================
-    logoutBtn.onclick = async () => {
-        await signOut(auth);
-        lessonPage.style.display = 'none';
-        loginPage.style.display = 'block';
-        document.getElementById('loginEmail').value = '';
-        document.getElementById('loginPassword').value = '';
-        loginError.style.display = 'none';
-    };
-
-    console.log('✅ NeuroLearn is ready! All buttons are working.');
-</script>
-</body>
-</html>
+      
